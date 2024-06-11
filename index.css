@@ -14,3 +14,10 @@ body {
        text-align: center;
        padding-top: 20px;
 }
+
+#menuBarDiv{
+       width: 400px;
+       height: 400px;
+       background-color: skyblue;
+       text-align: center;
+}
