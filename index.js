@@ -8,6 +8,7 @@ const isDev = process.env.NODE_ENV !== "production"
 // args for web crawler
 let showCrawler = true
 let formUrl
+let discussGroup
 
 let mainWindow
 
@@ -90,8 +91,13 @@ ipcMain.on("clicked-button", (event, arg) => {
 	main()
 })
 
-ipcMain.on("input-url", (event, url) => {
+ipcMain.on("input-formUrl", (event, url) => {
 	console.log(url)
 	formUrl = String(url)
 	console.log(formUrl)
+})
+
+ipcMain.on("input-discussGroup", (event, discussgroup)=>{
+       console.log(discussgroup)
+       discussGroup = discussgroup
 })

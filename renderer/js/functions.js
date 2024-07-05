@@ -3,9 +3,10 @@
 // const { ipcRenderer } = require("electron")
 
 // const BrowserWindow = electron.remote.BrowserWindow;
-const redButton = document.getElementById("red")
-const blueButton = document.getElementById("blue")
-const inputBox = document.getElementById("formUrl")
+const buttonRed = document.getElementById("buttonRed")
+const buttonBlue = document.getElementById("buttonBlue")
+const inputFormUrl = document.getElementById("inputFormUrl")
+const inputDiscussGroup = document.getElementById("inputDiscussGroup")
 
 function changeColor(newColor) {
 	const elem = document.getElementById("para")
@@ -29,12 +30,12 @@ const main2 = async () => {
 }
 
 
-redButton.addEventListener("click", () => {
+buttonRed.addEventListener("click", () => {
 	console.log("clicked red")
 	ipcRenderer.send("clicked-button", "red")
 })
 
-blueButton.addEventListener("click", () => {
+buttonBlue.addEventListener("click", () => {
 	console.log("clicked blue")
 })
 
@@ -44,6 +45,10 @@ ipcRenderer.on('crawler-closed', () => {
 
 
 
-inputBox.addEventListener('change', () =>{
-	ipcRenderer.send("input-url", inputBox.value)
+inputFormUrl.addEventListener('change', () =>{
+	ipcRenderer.send("input-formUrl", inputFormUrl.value)
+})
+
+inputDiscussGroup.addEventListener('change', () =>{
+	ipcRenderer.send("input-discussGroup", inputDiscussGroup.value)
 })
