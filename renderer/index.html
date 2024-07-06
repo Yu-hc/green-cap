@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>getElementById example</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self'" /> 
-    
-    
-    <link rel="stylesheet" href="./css/index.css">
-  </head>
-  <body>
-    <p id="para">Some text here</p>
-    <section id = "menuBarSection">
-       <div id = "menuBarDiv"></div>
-    </section>
-    <input id="inputFormUrl" type="text"/> <br>
-    <input id="inputDiscussGroup" type="number"/> <br>
+	<head>
+		<title>getElementById example</title>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="script-src 'self'"
+		/>
 
-    <button id="buttonBlue">blue</button>
-    <button id="buttonRed">red</button>
+		<link rel="stylesheet" href="./css/index.css" />
+		<link rel="stylesheet" href="./css/slider.css" />
+	</head>
+	<body>
+		<p id="para">Some text here</p>
+		<section id="menuBarSection">
+			<div id="menuBarDiv"></div>
+		</section>
+		random comment
+		<label class="switch">
+			<input id="inputRandomComment" type="checkbox" />
+			<span class="slider round"></span>
+		</label>
+    <br />
+    random check
+    <label class="switch">
+			<input id="inputRandomCheck" type="checkbox" />
+			<span class="slider round"></span>
+		</label>
+		<br />
+		enter url
+		<br />
+		<input id="inputFormUrl" type="text" />
+		<br />
+		enter group
+		<br />
+		<input id="inputDiscussGroup" type="number" />
+		<br />
 
-    
-    <script  src="./js/functions.js"></script>
-  </body>
+		<button id="buttonStartFilling">start filling</button>
+
+		<script src="./js/renderer.js"></script>
+	</body>
 </html>

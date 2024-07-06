@@ -9,6 +9,8 @@ const isDev = process.env.NODE_ENV !== "production"
 let showCrawler = true
 let formUrl
 let discussGroup
+let randomComment
+let randomCheck
 
 let mainWindow
 
@@ -40,7 +42,8 @@ const main = async () => {
 	//         }
 	// })
 
-	await window.loadURL(formUrl)
+	// await window.loadURL(formUrl)
+       await window.loadFile(formUrl)
     // TODO: set timout for loadurl , handle error
 	await delay(2000)
 	console.log(page.url())
@@ -87,17 +90,22 @@ pie.initialize(app).then(() => {
 		})
 })
 
-ipcMain.on("clicked-button", (event, arg) => {
+ipcMain.on("button-startFilling", (event, arg) => {
 	main()
 })
 
 ipcMain.on("input-formUrl", (event, url) => {
-	console.log(url)
 	formUrl = String(url)
-	console.log(formUrl)
 })
 
 ipcMain.on("input-discussGroup", (event, discussgroup)=>{
-       console.log(discussgroup)
        discussGroup = discussgroup
+})
+
+ipcMain.on("input-randomComment", (event, randomcomment)=>{
+       randomComment = randomcomment
+})
+
+ipcMain.on("input-randomCheck", (event, randomcheck)=>{
+       randomCheck = randomcheck
 })
