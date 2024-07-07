@@ -1,7 +1,7 @@
 const buttonStartFilling = document.getElementById("buttonStartFilling")
 const inputFormUrl = document.getElementById("inputFormUrl")
 const inputDiscussGroup = document.getElementById("inputDiscussGroup")
-const inputRandomComment = document.getElementById("inputRandomComment")
+const inputRandomSuggestion = document.getElementById("inputRandomSuggestion")
 const inputRandomCheck = document.getElementById("inputRandomCheck")
 
 
@@ -22,8 +22,8 @@ inputDiscussGroup.addEventListener('change', () =>{
 	ipcRenderer.send("input-discussGroup", inputDiscussGroup.value)
 })
 
-inputRandomComment.addEventListener('change', () =>{
-	ipcRenderer.send("input-randomComment", inputRandomComment.checked)
+inputRandomSuggestion.addEventListener('change', () =>{
+	ipcRenderer.send("input-randomSuggestion", inputRandomSuggestion.checked)
 })
 
 inputRandomCheck.addEventListener('change', () =>{
