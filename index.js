@@ -1,19 +1,21 @@
 const path = require("node:path")
-const { BrowserWindow, app, ipcMain } = require("electron")
+const { BrowserWindow, app, ipcMain, Notification } = require("electron")
 const pie = require("puppeteer-in-electron")
 const puppeteer = require("puppeteer-core")
-const fs = require('fs')
+const fs = require("fs")
 
 const isDev = process.env.NODE_ENV !== "production"
 
 // args for web crawler
+let string_webmailUser = ""
+let string_webmailPsswd = ""
 let showCrawler = true
 let formUrl =
 	"https://docs.google.com/forms/d/e/1FAIpQLSeVkvrtuFoeKN3Wl1NWovOiA0uNGKZyCe538bpDbq9mP_mKUw/viewform?usp=sf_link"
-let discussGroup
-let discussTopic = "blabalbal"
+let discussGroup = 0
+let discussTopic = ""
 let int_evaluationScore = 2
-let string_suggestion = 'bello'
+let string_suggestion = ""
 let randomSuggestion = false
 let randomCheck = false
 let stringArray_RandomSuggestion
@@ -40,6 +42,10 @@ const selectorPath_group =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(1) > div > div > div.vQES8d > div > div.OA0qNb.ncFHed.QXL7Te > div.MocG8c.HZ3kWc.mhLiyf.OIC90c.LMgvRb.KKjvXb"
 const selectorPath_discussTopic =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(2) > div > div > div.AgroKb > div > div.aCsJod.oJeWuf > div > div.Xb9hP > input"
+
+const NOTIFICATION_TITLE = 'Basic Notification'
+const NOTIFICATION_BODY = 'Notification from the Main process'
+
 let mainWindow
 
 function delay(time) {
@@ -47,25 +53,50 @@ function delay(time) {
 		setTimeout(resolve, time)
 	})
 }
+function createNotification(){
+	new Notification({
+	title: NOTIFICATION_TITLE,
+	body: NOTIFICATION_BODY
+     }).show()
+}
 
-function getEvaluationScore (){
-	if (!randomCheck)
-		return int_evaluationScore
-	return Math.floor(Math.random() * 5)+1
+function getEvaluationScore() {
+	if (!randomCheck) return int_evaluationScore
+	return Math.floor(Math.random() * 5) + 1
 }
 function getSuggestion() {
-	if (!randomSuggestion)
-		return string_suggestion
-	return stringArray_RandomSuggestion[Math.floor(Math.random() * stringArray_RandomSuggestion.length)]
+	if (!randomSuggestion) return string_suggestion
+	return stringArray_RandomSuggestion[
+		Math.floor(Math.random() * stringArray_RandomSuggestion.length)
+	]
 }
 
-const loadRandomComments = async () =>{
-	let $ = fs.readFileSync("./randomSuggestion.txt", "utf-8");
-	stringArray_RandomSuggestion = $.split('\n')
+const loadRandomComments = async () => {
+	let $ = fs.readFileSync("./randomSuggestion.txt", "utf-8")
+	stringArray_RandomSuggestion = $.split("\n")
 }
-loadRandomComments()
+
+function save_args() {
+	let datas = {
+		string_webmailUser,
+		string_webmailPsswd,
+		showCrawler,
+		formUrl,
+		discussGroup,
+		discussTopic,
+		int_evaluationScore,
+		string_suggestion,
+		randomSuggestion,
+		randomCheck,
+	}
+	let sData = JSON.stringify(datas)
+	fs.writeFileSync("data/data.json", sData)
+	console.log("Data Saved")
+}
 
 const main = async () => {
+	save_args()
+	createNotification()
 	const browser = await pie.connect(app, puppeteer)
 	const window = new BrowserWindow({
 		show: showCrawler,
@@ -96,7 +127,7 @@ const main = async () => {
 				await page.click(
 					selectorPath_evaluation +
 						":nth-child(" +
-						String(div+2) +
+						String(div + 2) +
 						")" +
 						" > div > div > div.PY6Xd > div.lLfZXe.fnxRtf.BpKDyb > span > div > label:nth-child(" +
 						String(getEvaluationScore() + 1) +
@@ -109,7 +140,7 @@ const main = async () => {
 			await page.click(selectorPath_nextPage2)
 		}
 	}
-	await delay(2000)
+	await delay(arg_pauseBeforeAction)
 	window.destroy()
 	mainWindow.webContents.send("crawler-closed")
 }
@@ -136,14 +167,19 @@ function createWindow() {
 	})
 }
 
+
+
 pie.initialize(app).then(() => {
 	app.whenReady().then(() => {
+		loadRandomComments()
 		createWindow()
+		
 		app.on("activate", () => {
 			if (BrowserWindow.getAllWindows().length === 0) {
 				createWindow()
 			}
-		})
+		}).then()
+		
 	}),
 		app.on("window-all-closed", () => {
 			if (process.platform == "darwin") {
@@ -152,8 +188,12 @@ pie.initialize(app).then(() => {
 		})
 })
 
-ipcMain.on("button-startFilling", (event, arg) => {
-	main()
+ipcMain.on("input-webmailUser", (event, user) => {
+	string_webmailUser = String(user)
+})
+
+ipcMain.on("input-webmailPsswd", (event, psswd) => {
+	string_webmailPsswd = String(psswd)
 })
 
 ipcMain.on("input-formUrl", (event, url) => {
@@ -171,3 +211,12 @@ ipcMain.on("input-randomSuggestion", (event, randomsuggestion) => {
 ipcMain.on("input-randomCheck", (event, randomcheck) => {
 	randomCheck = randomcheck
 })
+
+ipcMain.on("button-startFilling", (event, arg) => {
+	main()
+})
+
+
+
+
+
