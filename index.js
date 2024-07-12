@@ -213,6 +213,7 @@ ipcMain.on("input-randomCheck", (event, randomcheck) => {
 })
 
 ipcMain.on("button-startFilling", (event, arg) => {
+	console.log('s')
 	main()
 })
 

@@ -1,47 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>getElementById example</title>
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="script-src 'self'"
-		/>
-
-		<link rel="stylesheet" href="./css/index.css" />
-		<link rel="stylesheet" href="./css/slider.css" />
-	</head>
-	<body>
-		<p id="para">Some text here</p>
-		<input id="inputWebmailUser" type="text" />
-		<br />
-		<input id="inputWebmailPsswd" type="text" />
-		<br />
-		<section id="menuBarSection">
-			<div id="menuBarDiv"></div>
-		</section>
-		random comment
-		<label class="switch">
-			<input id="inputRandomSuggestion" type="checkbox" />
-			<span class="slider round"></span>
-		</label>
-		<br />
-		random check
-		<label class="switch">
-			<input id="inputRandomCheck" type="checkbox" />
-			<span class="slider round"></span>
-		</label>
-		<br />
-		enter url
-		<br />
-		<input id="inputFormUrl" type="text" />
-		<br />
-		enter group
-		<br />
-		<input id="inputDiscussGroup" type="number" />
-		<br />
-
-		<button id="buttonStartFilling">start filling</button>
-
-		<script src="./js/renderer.js"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Page Design</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/slider.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div id="container">
+        <p id="para">Some text here</p>
+        <input id="inputWebmailUser" type="text" placeholder="Enter webmail user">
+        <input id="inputWebmailPsswd" type="text" placeholder="Enter webmail password">
+        <section id="menuBarSection">
+            <div id="menuBarDiv"></div>
+        </section>
+        <label class="switch">
+            <input id="inputRandomSuggestion" type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <label class="switch">
+            <input id="inputRandomCheck" type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <input id="inputFormUrl" type="text" placeholder="Enter URL">
+        <input id="inputDiscussGroup" type="number" placeholder="Enter group number">
+        <button id="buttonStartFilling">Start Filling</button>
+    </div>
+</body>
 </html>
