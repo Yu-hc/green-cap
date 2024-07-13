@@ -9,13 +9,18 @@
 
 		<link rel="stylesheet" href="./css/index.css" />
 		<link rel="stylesheet" href="./css/slider.css" />
+        <link rel="stylesheet" href="./css/input.css" />
 	</head>
 	<body>
 		<p id="para">Some text here</p>
-		<input id="inputWebmailUser" type="text" />
-		<br />
-		<input id="inputWebmailPsswd" type="text" />
-		<br />
+        <label class="custom-field one">
+            <input id="inputWebmailUser" type="text" placeholder=" "/>
+            <span class="placeholder">Enter Text</span>
+        </label>
+        <label class="custom-field one">
+            <input id="inputWebmailPsswd" type="text" placeholder=" "/>
+            <span class="placeholder">Enter password</span>
+        </label>
 		<section id="menuBarSection">
 			<div id="menuBarDiv"></div>
 		</section>
@@ -33,15 +38,23 @@
 		<br />
 		enter url
 		<br />
-		<input id="inputFormUrl" type="text" />
+        <label class="custom-field one">
+            <input id="inputFormUrl" type="url" placeholder=" "/>
+            <span class="placeholder">表單連結</span>
+        </label>
 		<br />
 		enter group
 		<br />
-		<input id="inputDiscussGroup" type="number" />
+        <label class="custom-field one">
+            <input id="inputDiscussGroup" type="number" placeholder=" "/>
+            <span class="placeholder">小組討論組別</span>
+        </label>
+		
 		<br />
 
 		<button id="buttonStartFilling">start filling</button>
 
 		<script src="./js/renderer.js"></script>
+        <script src="./js/input.js"></script>
 	</body>
 </html>
