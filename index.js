@@ -216,16 +216,14 @@ const scrape = async () => {
 			if(out.includes(string_redcapTitle1)&& out.includes(string_redcapTitle2)){
 				await page.waitForSelector(sel)
 				await page.click(sel)
-				await page.waitForSelector('iframe')
+				await delay(arg_pauseBeforeAction*5)
 				let iframeElementHandle = await page.$('iframe')
 				let iframe = await iframeElementHandle.contentFrame()
 				let href = await iframe.$eval(selectorPath_formUrl , el => el.href)
 				console.log(href)
-				
 				// TODO: uncomment the line below to get the formUrl
 				// formurl = href 	
 			}
-			await delay(arg_pauseBeforeAction  *4)
 		}
 		index++
 		array_sender.push(String(sender))
@@ -269,7 +267,7 @@ pie.initialize(app).then(() => {
 			if (BrowserWindow.getAllWindows().length === 0) {
 				createWindow()
 			}
-		}).then()
+		})
 	}),
 		app.on("window-all-closed", () => {
 			if (process.platform == "darwin") {
