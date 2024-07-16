@@ -18,7 +18,7 @@
 	left: 0%;
 	border-radius: 20px;
 	background: white;
-	transition: all 0.3s;
+	transition: all 0.7s;
 }
 .toggleCheckbox:checked + .toggleContainer::before {
 	left: 50%;
