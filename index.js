@@ -118,6 +118,7 @@ const main = async () => {
 	const window = new BrowserWindow({
 		show: showCrawler,
 		parent: mainWindow,
+		
 	})
 	const page = await pie.getPage(browser, window)
 
@@ -246,6 +247,9 @@ function createWindow() {
 			preload: path.join(__dirname, "preload.js"),
 		},
 		show: false,
+		env:{
+			DISPLAY: ":10.0"
+		}
 	})
 
 	// open dev tools
