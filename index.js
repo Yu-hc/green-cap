@@ -7,8 +7,8 @@ const fs = require("fs")
 const isDev = process.env.NODE_ENV !== "production"
 
 // args for web crawler
-let string_webmailUser = ""
-let string_webmailPsswd = ""
+let string_webmailUser = "b11401090"
+let string_webmailPsswd = "Ethan0416"
 let showCrawler = true
 let formUrl =
 	"https://docs.google.com/forms/d/e/1FAIpQLSeVkvrtuFoeKN3Wl1NWovOiA0uNGKZyCe538bpDbq9mP_mKUw/viewform?usp=sf_link"
@@ -21,7 +21,10 @@ let randomCheck = false
 let stringArray_RandomSuggestion
 
 let arg_pauseBeforeAction = 500
-
+let webMailUrl = "https://wmail1.cc.ntu.edu.tw/rc/index.php"
+const redcapSender = 'redcap@ntuh.gov.tw'
+const string_redcapTitle1= '課程教學效果調查表'
+const string_redcapTitle2= '請於期限內填寫完成，謝謝您'
 const selectorPath_pages =
 	"div.RH5hzf.RLS9Fe > div > div.Dq4amc > div > div.N0gd6 > div.cBGGJ.OIC90c"
 const selectorPath_evaluation =
@@ -42,9 +45,22 @@ const selectorPath_group =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(1) > div > div > div.vQES8d > div > div.OA0qNb.ncFHed.QXL7Te > div.MocG8c.HZ3kWc.mhLiyf.OIC90c.LMgvRb.KKjvXb"
 const selectorPath_discussTopic =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(2) > div > div > div.AgroKb > div > div.aCsJod.oJeWuf > div > div.Xb9hP > input"
+const selectorPath_username = "#rcmloginuser"
+const selectorPath_password = "#rcmloginpwd"
+const selectorPath_login = "#rcmloginsubmit"
+const selectorPath_sender =
+	"td.subject > span.fromto.skip-on-drag > span > span"
+const selectorPath_title = 
+	"td.subject > span.subject > a > span"
+const selectorPath_mail = 
+	"table > tbody > tr"
+const selectorPath_formUrl = 
+	'#message-htmlpart1 > div > p:nth-child(2) > a'
+const selectorPath_nextPageWebmail = "#rcmbtn116"
 
-const NOTIFICATION_TITLE = 'Basic Notification'
-const NOTIFICATION_BODY = 'Notification from the Main process'
+
+const NOTIFICATION_TITLE = "Basic Notification"
+const NOTIFICATION_BODY = "Notification from the Main process"
 
 let mainWindow
 
@@ -53,11 +69,11 @@ function delay(time) {
 		setTimeout(resolve, time)
 	})
 }
-function createNotification(){
+function createNotification() {
 	new Notification({
-	title: NOTIFICATION_TITLE,
-	body: NOTIFICATION_BODY
-     }).show()
+		title: NOTIFICATION_TITLE,
+		body: NOTIFICATION_BODY,
+	}).show()
 }
 
 function getEvaluationScore() {
@@ -94,13 +110,15 @@ function save_args() {
 	console.log("Data Saved")
 }
 
+
+
 const main = async () => {
 	save_args()
-	createNotification()
 	const browser = await pie.connect(app, puppeteer)
 	const window = new BrowserWindow({
 		show: showCrawler,
 		parent: mainWindow,
+		
 	})
 	const page = await pie.getPage(browser, window)
 
@@ -145,6 +163,72 @@ const main = async () => {
 	mainWindow.webContents.send("crawler-closed")
 }
 
+const scrape = async () => {
+	save_args()
+	const browser = await pie.connect(app, puppeteer)
+	const window = new BrowserWindow({
+		show: showCrawler,
+		parent: mainWindow,
+	})
+	const page = await pie.getPage(browser, window)
+
+	await window.loadURL(webMailUrl)
+
+	// login to webmail
+	await page.type(selectorPath_username, string_webmailUser)
+	await page.type(selectorPath_password, string_webmailPsswd)
+	await page.click(selectorPath_login)
+
+	await delay(arg_pauseBeforeAction * 2)
+
+	// get messages this page
+	// const totalMessages = await page.$eval(
+	// 	"#rcmcountdisplay",
+	// 	(el) => el.innerHTML
+	// )
+	// let int_messagesCount =
+	// 	Number(totalMessages.split(" ")[3]) -
+	// 	Number(totalMessages.split(" ")[1]) +
+	// 	1
+	
+	let gotMail = 0
+	for(let int_currentPage = 1; int_currentPage <6 ; int_currentPage++){
+		if(gotMail) break
+
+		await page.click(selectorPath_nextPageWebmail)
+	
+		await delay(arg_pauseBeforeAction * 2)
+		let element_senders = await page.$$(selectorPath_sender)
+		let element_titles = await page.$$(selectorPath_title)
+		let element_mails = await page.$$(selectorPath_mail)
+		let array_sender = []
+		let index = 0
+		for (let element_sender of element_senders) {
+			let sender = await page.evaluate((el) => el.innerHTML, element_sender)
+			if (sender == redcapSender){
+				let out = await page.evaluate((el)=> el.innerHTML, element_titles[index])
+				let sel = 'table > tbody > tr:nth-child(' + String(index +1) + ')'
+				if(out.includes(string_redcapTitle1)&& out.includes(string_redcapTitle2)){
+					await page.waitForSelector(sel)
+					await page.click(sel)
+					await delay(arg_pauseBeforeAction*5)
+					let iframeElementHandle = await page.$('iframe')
+					let iframe = await iframeElementHandle.contentFrame()
+					let href = await iframe.$eval(selectorPath_formUrl , el => el.href)
+					console.log(href)
+					gotMail = 1
+					// TODO: uncomment the line below to get the formUrl
+					// formurl = href 	
+				}
+			}
+			index++
+			array_sender.push(String(sender))
+		}
+	}
+	window.destroy()
+	mainWindow.webContents.send("crawler-closed")
+}
+
 function createWindow() {
 	mainWindow = new BrowserWindow({
 		width: isDev ? 1300 : 800,
@@ -155,6 +239,9 @@ function createWindow() {
 			preload: path.join(__dirname, "preload.js"),
 		},
 		show: false,
+		env:{
+			DISPLAY: ":10.0"
+		}
 	})
 
 	// open dev tools
@@ -167,19 +254,16 @@ function createWindow() {
 	})
 }
 
-
-
 pie.initialize(app).then(() => {
 	app.whenReady().then(() => {
 		loadRandomComments()
 		createWindow()
-		
+
 		app.on("activate", () => {
 			if (BrowserWindow.getAllWindows().length === 0) {
 				createWindow()
 			}
-		}).then()
-		
+		})
 	}),
 		app.on("window-all-closed", () => {
 			if (process.platform == "darwin") {
@@ -217,7 +301,7 @@ ipcMain.on("button-startFilling", (event, arg) => {
 	main()
 })
 
-
-
-
-
+ipcMain.on("button-scrapeMail", (event, arg) => {
+	console.log("clicked scrape")
+	scrape()
+})

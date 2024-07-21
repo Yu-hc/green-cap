@@ -4,8 +4,9 @@ const inputFormUrl = document.getElementById("inputFormUrl")
 const inputDiscussGroup = document.getElementById("inputDiscussGroup")
 const inputRandomSuggestion = document.getElementById("inputRandomSuggestion")
 const inputRandomCheck = document.getElementById("inputRandomCheck")
-const buttonStartFilling = document.getElementById("buttonStartFilling")
 
+const buttonStartFilling = document.getElementById("buttonStartFilling")
+const buttonScrapeMail = document.getElementById("buttonScrapeMail")
 
 
 
@@ -34,9 +35,12 @@ inputRandomCheck.addEventListener('change', () =>{
 })
 
 buttonStartFilling.addEventListener('click', () => {
-	console.log("clicked start filling")
 	ipcRenderer.send("button-startFilling")
 })
+buttonScrapeMail.addEventListener('click', () => {
+	ipcRenderer.send("button-scrapeMail")
+})
+
 // ipcRenderer.on('crawler-closed', () => {
 // 	console.log("crawler-closed")
 // })

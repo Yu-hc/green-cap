@@ -2,3 +2,8 @@ node_modules
 redcap_form
 viewer.js
 out
+<<<<<<< HEAD
+=======
+git-filter-repo.txt
+renderer/test
+>>>>>>> frontend
