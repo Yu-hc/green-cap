@@ -182,57 +182,49 @@ const scrape = async () => {
 	await delay(arg_pauseBeforeAction * 2)
 
 	// get messages this page
-	const totalMessages = await page.$eval(
-		"#rcmcountdisplay",
-		(el) => el.innerHTML
-	)
-	let int_messagesCount =
-		Number(totalMessages.split(" ")[3]) -
-		Number(totalMessages.split(" ")[1]) +
-		1
-	let int_currentPage = 2
-	// let element_senders = await page.$$(
-	// 	selectorPath_sender
+	// const totalMessages = await page.$eval(
+	// 	"#rcmcountdisplay",
+	// 	(el) => el.innerHTML
 	// )
-	// let array_sender = []
-	// for (let element_sender of element_senders){
-	// 	let sender = await page.evaluate(el => el.innerHTML, element_sender);
-	// 	array_sender.push(String(sender))
-	// }
-	await delay(arg_pauseBeforeAction * 2)
-
-	await page.click(selectorPath_nextPageWebmail)
-
-	await delay(arg_pauseBeforeAction * 2)
-	let element_senders = await page.$$(selectorPath_sender)
-	let element_titles = await page.$$(selectorPath_title)
-	let element_mails = await page.$$(selectorPath_mail)
-	let array_sender = []
-	let index = 0
-	for (let element_sender of element_senders) {
-		let sender = await page.evaluate((el) => el.innerHTML, element_sender)
-		if (sender == redcapSender){
-			let out = await page.evaluate((el)=> el.innerHTML, element_titles[index])
-			let sel = 'table > tbody > tr:nth-child(' + String(index +1) + ')'
-			if(out.includes(string_redcapTitle1)&& out.includes(string_redcapTitle2)){
-				await page.waitForSelector(sel)
-				await page.click(sel)
-				await delay(arg_pauseBeforeAction*5)
-				let iframeElementHandle = await page.$('iframe')
-				let iframe = await iframeElementHandle.contentFrame()
-				let href = await iframe.$eval(selectorPath_formUrl , el => el.href)
-				console.log(href)
-				// TODO: uncomment the line below to get the formUrl
-				// formurl = href 	
-			}
-		}
-		index++
-		array_sender.push(String(sender))
-	}
-	// console.log(array_sender)
+	// let int_messagesCount =
+	// 	Number(totalMessages.split(" ")[3]) -
+	// 	Number(totalMessages.split(" ")[1]) +
+	// 	1
 	
+	let gotMail = 0
+	for(let int_currentPage = 1; int_currentPage <6 ; int_currentPage++){
+		if(gotMail) break
 
-	await delay(arg_pauseBeforeAction * 4)
+		await page.click(selectorPath_nextPageWebmail)
+	
+		await delay(arg_pauseBeforeAction * 2)
+		let element_senders = await page.$$(selectorPath_sender)
+		let element_titles = await page.$$(selectorPath_title)
+		let element_mails = await page.$$(selectorPath_mail)
+		let array_sender = []
+		let index = 0
+		for (let element_sender of element_senders) {
+			let sender = await page.evaluate((el) => el.innerHTML, element_sender)
+			if (sender == redcapSender){
+				let out = await page.evaluate((el)=> el.innerHTML, element_titles[index])
+				let sel = 'table > tbody > tr:nth-child(' + String(index +1) + ')'
+				if(out.includes(string_redcapTitle1)&& out.includes(string_redcapTitle2)){
+					await page.waitForSelector(sel)
+					await page.click(sel)
+					await delay(arg_pauseBeforeAction*5)
+					let iframeElementHandle = await page.$('iframe')
+					let iframe = await iframeElementHandle.contentFrame()
+					let href = await iframe.$eval(selectorPath_formUrl , el => el.href)
+					console.log(href)
+					gotMail = 1
+					// TODO: uncomment the line below to get the formUrl
+					// formurl = href 	
+				}
+			}
+			index++
+			array_sender.push(String(sender))
+		}
+	}
 	window.destroy()
 	mainWindow.webContents.send("crawler-closed")
 }
