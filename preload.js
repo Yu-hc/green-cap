@@ -10,8 +10,11 @@ contextBridge.exposeInMainWorld("pie", {
 
 contextBridge.exposeInMainWorld("ipcRenderer", {
 	send: (channel, data) => ipcRenderer.send(channel, data),
-	on: (channel, func) =>
-		ipcRenderer.on(channel, (event, ...args) => func(...args)),
+	on: (channel, func) => ipcRenderer.on (channel, func),
+	once: (channel, func) => ipcRenderer.once(channel, func),
+})
+contextBridge.exposeInMainWorld('data', {
+	loadDatas: (callback) => ipcRenderer.on('load-datas', (_event, value) => callback(value)),
 })
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -24,3 +27,4 @@ window.addEventListener("DOMContentLoaded", () => {
 		replaceText(`${dependency}-version`, process.versions[dependency])
 	}
 })
+

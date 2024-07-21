@@ -41,6 +41,18 @@ buttonScrapeMail.addEventListener('click', () => {
 	ipcRenderer.send("button-scrapeMail")
 })
 
-// ipcRenderer.on('crawler-closed', () => {
-// 	console.log("crawler-closed")
-// })
+
+
+function set_webmailUser(){
+	inputWebmailUser.value = 'abc';
+}
+
+
+window.data.loadDatas((datas) => {
+	inputWebmailUser.value = datas.string_webmailUser
+	inputWebmailPsswd.value = datas.string_webmailPsswd
+	inputFormUrl.value = datas.formUrl
+	inputDiscussGroup.value = datas.discussGroup
+	inputRandomSuggestion.checked = datas.randomSuggestion
+	inputRandomCheck.checked = datas.randomCheck
+})

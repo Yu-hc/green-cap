@@ -22,9 +22,9 @@ let stringArray_RandomSuggestion
 
 let arg_pauseBeforeAction = 500
 let webMailUrl = "https://wmail1.cc.ntu.edu.tw/rc/index.php"
-const redcapSender = 'redcap@ntuh.gov.tw'
-const string_redcapTitle1= '課程教學效果調查表'
-const string_redcapTitle2= '請於期限內填寫完成，謝謝您'
+const redcapSender = "redcap@ntuh.gov.tw"
+const string_redcapTitle1 = "課程教學效果調查表"
+const string_redcapTitle2 = "請於期限內填寫完成，謝謝您"
 const selectorPath_pages =
 	"div.RH5hzf.RLS9Fe > div > div.Dq4amc > div > div.N0gd6 > div.cBGGJ.OIC90c"
 const selectorPath_evaluation =
@@ -50,14 +50,10 @@ const selectorPath_password = "#rcmloginpwd"
 const selectorPath_login = "#rcmloginsubmit"
 const selectorPath_sender =
 	"td.subject > span.fromto.skip-on-drag > span > span"
-const selectorPath_title = 
-	"td.subject > span.subject > a > span"
-const selectorPath_mail = 
-	"table > tbody > tr"
-const selectorPath_formUrl = 
-	'#message-htmlpart1 > div > p:nth-child(2) > a'
+const selectorPath_title = "td.subject > span.subject > a > span"
+const selectorPath_mail = "table > tbody > tr"
+const selectorPath_formUrl = "#message-htmlpart1 > div > p:nth-child(2) > a"
 const selectorPath_nextPageWebmail = "#rcmbtn116"
-
 
 const NOTIFICATION_TITLE = "Basic Notification"
 const NOTIFICATION_BODY = "Notification from the Main process"
@@ -91,6 +87,15 @@ const loadRandomComments = async () => {
 	let $ = fs.readFileSync("./randomSuggestion.txt", "utf-8")
 	stringArray_RandomSuggestion = $.split("\n")
 }
+const load_args = async () => {
+	let exist = fs.existsSync("data/data.json")
+	if (exist) {
+		let sData = fs.readFileSync("data/data.json")
+		let datas = JSON.parse(sData)
+		mainWindow.webContents.send("load-datas", datas)
+		console.log(datas)
+	}
+}
 
 function save_args() {
 	let datas = {
@@ -110,15 +115,13 @@ function save_args() {
 	console.log("Data Saved")
 }
 
-
-
 const main = async () => {
 	save_args()
+	load_args()
 	const browser = await pie.connect(app, puppeteer)
 	const window = new BrowserWindow({
 		show: showCrawler,
 		parent: mainWindow,
-		
 	})
 	const page = await pie.getPage(browser, window)
 
@@ -165,6 +168,7 @@ const main = async () => {
 
 const scrape = async () => {
 	save_args()
+
 	const browser = await pie.connect(app, puppeteer)
 	const window = new BrowserWindow({
 		show: showCrawler,
@@ -190,13 +194,13 @@ const scrape = async () => {
 	// 	Number(totalMessages.split(" ")[3]) -
 	// 	Number(totalMessages.split(" ")[1]) +
 	// 	1
-	
+
 	let gotMail = 0
-	for(let int_currentPage = 1; int_currentPage <6 ; int_currentPage++){
-		if(gotMail) break
+	for (let int_currentPage = 1; int_currentPage < 6; int_currentPage++) {
+		if (gotMail) break
 
 		await page.click(selectorPath_nextPageWebmail)
-	
+
 		await delay(arg_pauseBeforeAction * 2)
 		let element_senders = await page.$$(selectorPath_sender)
 		let element_titles = await page.$$(selectorPath_title)
@@ -204,21 +208,34 @@ const scrape = async () => {
 		let array_sender = []
 		let index = 0
 		for (let element_sender of element_senders) {
-			let sender = await page.evaluate((el) => el.innerHTML, element_sender)
-			if (sender == redcapSender){
-				let out = await page.evaluate((el)=> el.innerHTML, element_titles[index])
-				let sel = 'table > tbody > tr:nth-child(' + String(index +1) + ')'
-				if(out.includes(string_redcapTitle1)&& out.includes(string_redcapTitle2)){
+			let sender = await page.evaluate(
+				(el) => el.innerHTML,
+				element_sender
+			)
+			if (sender == redcapSender) {
+				let out = await page.evaluate(
+					(el) => el.innerHTML,
+					element_titles[index]
+				)
+				let sel =
+					"table > tbody > tr:nth-child(" + String(index + 1) + ")"
+				if (
+					out.includes(string_redcapTitle1) &&
+					out.includes(string_redcapTitle2)
+				) {
 					await page.waitForSelector(sel)
 					await page.click(sel)
-					await delay(arg_pauseBeforeAction*5)
-					let iframeElementHandle = await page.$('iframe')
+					await delay(arg_pauseBeforeAction * 5)
+					let iframeElementHandle = await page.$("iframe")
 					let iframe = await iframeElementHandle.contentFrame()
-					let href = await iframe.$eval(selectorPath_formUrl , el => el.href)
+					let href = await iframe.$eval(
+						selectorPath_formUrl,
+						(el) => el.href
+					)
 					console.log(href)
 					gotMail = 1
 					// TODO: uncomment the line below to get the formUrl
-					// formurl = href 	
+					// formurl = href
 				}
 			}
 			index++
@@ -239,9 +256,9 @@ function createWindow() {
 			preload: path.join(__dirname, "preload.js"),
 		},
 		show: false,
-		env:{
-			DISPLAY: ":10.0"
-		}
+		env: {
+			DISPLAY: ":10.0",
+		},
 	})
 
 	// open dev tools
@@ -249,6 +266,9 @@ function createWindow() {
 		mainWindow.webContents.openDevTools()
 	}
 	mainWindow.loadFile(path.join(__dirname, "./renderer/index.html"))
+	mainWindow.webContents.on("did-finish-load", () => {
+		load_args()
+	})
 	mainWindow.once("ready-to-show", () => {
 		mainWindow.show()
 	})
@@ -256,14 +276,13 @@ function createWindow() {
 
 pie.initialize(app).then(() => {
 	app.whenReady().then(() => {
-		loadRandomComments()
-		createWindow()
-
-		app.on("activate", () => {
-			if (BrowserWindow.getAllWindows().length === 0) {
-				createWindow()
-			}
-		})
+		loadRandomComments(),
+			createWindow(),
+			app.on("activate", () => {
+				if (BrowserWindow.getAllWindows().length === 0) {
+					createWindow()
+				}
+			})
 	}),
 		app.on("window-all-closed", () => {
 			if (process.platform == "darwin") {
@@ -297,7 +316,7 @@ ipcMain.on("input-randomCheck", (event, randomcheck) => {
 })
 
 ipcMain.on("button-startFilling", (event, arg) => {
-	console.log('s')
+	console.log("s")
 	main()
 })
 
