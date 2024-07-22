@@ -1,0 +1,285 @@
+
+.box {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 800px;
+	height: 600px;
+}
+
+.bg-container{
+       width :1000px;
+       height: 600px;
+       display: flex;
+}
+.bg {
+	height: 600px;
+	width: 210px;
+	position: absolute;
+       z-index: -2;
+       
+}
+.bg#space1 {
+	background-image: url(../images/backgrounds/backgrounds.001.png);
+       background-color: red;
+       left : 0px;
+}
+.bg#space2 {
+	background-image: url(../images/backgrounds/backgrounds.002.png);
+       background-color: orange;
+       left : 200px;
+}
+.bg#space3 {
+	background-image: url(../images/backgrounds/backgrounds.003.png);
+       background-color: yellow;
+       left : 400px;
+}
+.bg#space4 {
+	background-image: url(../images/backgrounds/backgrounds.004.png);
+       background-color: green;
+       left :600px;
+}
+.bg#space5 {
+      
+	background-image: url(../images/backgrounds/backgrounds.005.png);
+       background-color: blue;
+       left: 800px;
+}
+.bg#space6 {
+	background-image: url(../images/backgrounds/backgrounds.006.png);
+       background-color: violet;
+       left: 1000px;
+}
+#move {
+	height: 50px;
+	width: 50px;
+	background: red;
+	position: absolute;
+	bottom: 100px;
+	transform: translateX(-50%);
+       z-index: 100;
+}
+#space-ship {
+	height: 36.8px;
+	width: 46.5px;
+       /* transform: rotate(45deg); */
+	position: absolute;
+	left: 0px;
+	top: 11.6px;
+       z-index: 10;
+	/*   transform: translateX(150px); */
+}
+#ship-container-x {
+	height: 60px;
+	width: 60px;
+	top: 260px;
+	position: absolute;
+	left: 150px;
+       z-index: 10;
+}
+#ship-container-y {
+	height: 60px;
+	width: 60px;
+	position: absolute;
+}
+.fire{
+       height: 0px;
+       width: 0px;
+       left : 0px;
+       top : 30px;
+       position: absolute;
+       transform: rotate(-90deg);
+}
+.fire#fire-1{
+       z-index: 10;
+}
+.fire#fire-2{
+       z-index: 11;
+}
+.fire#fire-3{
+       z-index: 12;
+}
+
+#stop {
+	height: 50px;
+	width: 50px;
+	background: yellow;
+	position: absolute;
+	bottom: 170px;
+	transform: translateX(-50%);
+       z-index: 100;
+}
+.planet {
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	left: 100vw;
+	top: 125px;
+       z-index: 8;
+}
+
+.planet#Earth{
+       position: absolute;
+       left: 50px;
+       top : 240px;
+}
+@keyframes fly {
+	0% {
+		left: 150px;
+	}
+	100% {
+		left: 370px;
+	}
+}
+@keyframes fly2 {
+	0% {
+		left: 370px;
+	}
+	25% {
+		left: 370px;
+	}
+	100% {
+		left: 860px;
+	}
+}
+@keyframes oscillate{
+       0% {
+             
+              top: 0px;
+       }
+       100% {
+              
+              top: 5px;
+       }
+}
+@keyframes turn {
+	0% {
+		transform: rotate(0deg);
+	}
+	60% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(90deg);
+	}
+}
+@keyframes orbit {
+	from {
+		left: 500px;
+		transform: rotate(0deg) translateY(100px);
+	}
+	to {
+		left: 500px;
+		transform: rotate(-720deg) translateY(100px);
+	}
+}
+@keyframes planet-pass {
+	0% {
+		left: 100vw;
+	}
+	100% {
+		left: 0;
+		transform: translateX(-100%);
+	}
+}
+@keyframes earth-leave {
+       0%{
+              left : 50px;
+       }
+       100%{
+              left : -150px;
+       }
+}
+@keyframes bg-move{
+       0% {
+              /* transform: translateX(0px); */
+              left : 1000px;
+       }
+       100%{
+              /* transform: translateX(-800px); */
+              left : -200px;
+       }
+}
+@keyframes bg-move-i0{
+       0% {
+              left : 0px;
+       }
+       100%{
+              /* transform: translateX(-200px); */
+              left : -200px;
+       }
+}
+@keyframes bg-move-i1{
+       0% {
+              left : 200px;
+       }
+       100%{
+              /* transform: translateX(-400px); */
+              left : -200px;
+       }
+}
+@keyframes bg-move-i2{
+       0% {
+              left : 400px;
+       }
+       100%{
+              /* transform: translateX(-600px); */
+              left : -200px;
+       }
+}
+@keyframes bg-move-i3{
+       0% {
+              left : 600px;
+       }
+       100%{
+              /* transform: translateX(-600px); */
+              left : -200px;
+       }
+}
+@keyframes bg-move-i4{
+       0% {
+              left : 800px;
+       }
+       100%{
+              /* transform: translateX(-600px); */
+              left : -200px;
+       }
+}
+@keyframes bg-move-i5{
+       0% {
+              left : 1000px;
+       }
+       100%{
+              /* transform: translateX(-600px); */
+              left : -200px;
+       }
+}
+@keyframes fire-f1 {
+       0%{
+              height: 60px;
+              width: 60px;
+              left : -60px;
+              top : 0px;
+       }
+       100%{
+              height: 55px;
+              width: 55px;
+              left : -55px;
+              top : 2.5px;
+       }
+}
+@keyframes fire-start {
+       0%{
+              height: 0px;
+              width: 0px;
+              left : 0px;
+              top : 30px;
+       }
+       100%{
+              height: 60px;
+              width: 60px;
+              left : -60px;
+              top : 0px;
+       }
+
+}
