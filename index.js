@@ -21,6 +21,7 @@ let string_suggestion = ""
 let randomSuggestion = false
 let randomCheck = false
 let stringArray_RandomSuggestion
+let useMail = true
 
 let arg_pauseBeforeAction = 500
 
@@ -65,7 +66,15 @@ const load_args = async () => {
 		mainWindow.webContents.send("load-datas", datas)
 	}
 }
-
+const reset_args = async() =>{
+	let existDefault = fs.existsSync("data/default.json")
+	let existData = fs.existsSync("data/data.json")
+	if(existData && existDefault){
+		let sDefault = fs.readFileSync('data/default.json')
+		fs.writeFileSync("data/data.json", sDefault)
+	}
+	load_args()
+}
 function save_args() {
 	let datas = {
 		string_webmailUser,
@@ -78,10 +87,10 @@ function save_args() {
 		string_suggestion,
 		randomSuggestion,
 		randomCheck,
+		useMail,
 	}
 	let sData = JSON.stringify(datas)
 	fs.writeFileSync("data/data.json", sData)
-	console.log("Data Saved")
 }
 
 const main = async () => {
@@ -150,16 +159,6 @@ const scrape = async () => {
 
 	await delay(arg_pauseBeforeAction * 2)
 
-	// get messages this page
-	// const totalMessages = await page.$eval(
-	// 	"#rcmcountdisplay",
-	// 	(el) => el.innerHTML
-	// )
-	// let int_messagesCount =
-	// 	Number(totalMessages.split(" ")[3]) -
-	// 	Number(totalMessages.split(" ")[1]) +
-	// 	1
-
 	let gotMail = 0
 	for (let int_currentPage = 1; int_currentPage < 6; int_currentPage++) {
 		if (gotMail) break
@@ -216,6 +215,7 @@ function createWindow() {
 			contextIsolation: true,
 			nodeIntegration: true,
 			preload: path.join(__dirname, "preload.js"),
+			frame: false,
 		},
 		show: false,
 		env: {
@@ -255,26 +255,46 @@ pie.initialize(app).then(() => {
 
 ipcMain.on("input-webmailUser", (event, user) => {
 	string_webmailUser = String(user)
+	save_args()
 })
 
 ipcMain.on("input-webmailPsswd", (event, psswd) => {
 	string_webmailPsswd = String(psswd)
+	save_args()
+
 })
 
 ipcMain.on("input-formUrl", (event, url) => {
 	formUrl = String(url)
+	save_args()
+
 })
 
 ipcMain.on("input-discussGroup", (event, discussgroup) => {
 	discussGroup = discussgroup
+	save_args()
+
 })
 
-ipcMain.on("input-randomSuggestion", (event, randomsuggestion) => {
+ipcMain.on("toggle-randomSuggestion", (event, randomsuggestion) => {
 	randomSuggestion = randomsuggestion
+	save_args()
+
 })
 
-ipcMain.on("input-randomCheck", (event, randomcheck) => {
+ipcMain.on("toggle-randomCheck", (event, randomcheck) => {
 	randomCheck = randomcheck
+	save_args()
+
+})
+ipcMain.on("toggle-showCrawler", (event, showcrawler) => {
+	showCrawler = showcrawler
+	save_args()
+
+})
+ipcMain.on("toggle-useMail", (event, usemail) =>{
+	useMail = usemail
+	save_args()
 })
 
 ipcMain.on("button-startFilling", (event, arg) => {
@@ -283,4 +303,8 @@ ipcMain.on("button-startFilling", (event, arg) => {
 
 ipcMain.on("button-scrapeMail", (event, arg) => {
 	scrape()
+})
+
+ipcMain.on('button-reset', ()=>{
+	reset_args()
 })

@@ -2,13 +2,32 @@ const inputWebmailUser = document.getElementById("inputWebmailUser")
 const inputWebmailPsswd= document.getElementById("inputWebmailPsswd")
 const inputFormUrl = document.getElementById("inputFormUrl")
 const inputDiscussGroup = document.getElementById("inputDiscussGroup")
-const inputRandomSuggestion = document.getElementById("inputRandomSuggestion")
-const inputRandomCheck = document.getElementById("inputRandomCheck")
+
+const toggleRandomSuggestion = document.getElementById("toggleRandomSuggestion")
+const toggleRandomCheck = document.getElementById("toggleRandomCheck")
+const toggleShowCrawler = document.getElementById("toggleShowCrawler")
+const toggleUseMail = document.getElementById("toggleUseMail")
 
 const buttonStartFilling = document.getElementById("buttonStartFilling")
 const buttonScrapeMail = document.getElementById("buttonScrapeMail")
+const buttonReset = document.getElementById('reset-btn')
 
 
+
+const cardSwitcher = document.getElementById('toggleUseMail');
+const cardWrapper = document.querySelector('.card-wrapper');
+
+function toggleCards() {
+	if (cardSwitcher.checked) {
+		cardWrapper.style.transform = 'translateX(-320px)';
+	} else {
+		cardWrapper.style.transform = 'translateX(0)';
+	}
+}
+
+cardSwitcher.addEventListener('change', toggleCards);
+   
+   
 
 inputWebmailUser.addEventListener('change', () =>{
 	ipcRenderer.send("input-webmailUser", inputWebmailUser.value)
@@ -26,13 +45,21 @@ inputDiscussGroup.addEventListener('change', () =>{
 	ipcRenderer.send("input-discussGroup", inputDiscussGroup.value)
 })
 
-inputRandomSuggestion.addEventListener('change', () =>{
-	ipcRenderer.send("input-randomSuggestion", inputRandomSuggestion.checked)
+
+toggleRandomSuggestion.addEventListener('change', () =>{
+	ipcRenderer.send("toggle-randomSuggestion", toggleRandomSuggestion.checked)
+})
+toggleRandomCheck.addEventListener('change', () =>{
+	ipcRenderer.send("toggle-randomCheck", toggleRandomCheck.checked)
+})
+toggleShowCrawler.addEventListener('change', () =>{
+	ipcRenderer.send("toggle-showCrawler", toggleShowCrawler.checked)
+})
+toggleUseMail.addEventListener('change', () =>{
+	ipcRenderer.send("toggle-useMail", !toggleUseMail.checked)
+	console.log(!toggleUseMail.checked)
 })
 
-inputRandomCheck.addEventListener('change', () =>{
-	ipcRenderer.send("input-randomCheck", inputRandomCheck.checked)
-})
 
 buttonStartFilling.addEventListener('click', () => {
 	ipcRenderer.send("button-startFilling")
@@ -40,12 +67,9 @@ buttonStartFilling.addEventListener('click', () => {
 buttonScrapeMail.addEventListener('click', () => {
 	ipcRenderer.send("button-scrapeMail")
 })
-
-
-
-function set_webmailUser(){
-	inputWebmailUser.value = 'abc';
-}
+buttonReset.addEventListener('click', ()=>{
+	ipcRenderer.send("button-reset")
+})
 
 
 window.data.loadDatas((datas) => {
@@ -53,6 +77,9 @@ window.data.loadDatas((datas) => {
 	inputWebmailPsswd.value = datas.string_webmailPsswd
 	inputFormUrl.value = datas.formUrl
 	inputDiscussGroup.value = datas.discussGroup
-	inputRandomSuggestion.checked = datas.randomSuggestion
-	inputRandomCheck.checked = datas.randomCheck
+	toggleRandomSuggestion.checked = datas.randomSuggestion
+	toggleRandomCheck.checked = datas.randomCheck
+	toggleShowCrawler.checked = datas.showCrawler
+	toggleUseMail.checked = !datas.useMail
+	toggleCards()
 })

@@ -1,10 +1,15 @@
 /* TODO fix z index */
-.box {
+.background{
 	position: absolute;
 	left: 0;
 	top: 0;
 	width: 800px;
 	height: 600px;
+       z-index: -100;
+       margin: 0;
+       border: 0;
+       padding: 0;
+       box-sizing: border-box;
 }
 
 .bg-container{

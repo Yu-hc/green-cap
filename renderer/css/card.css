@@ -13,22 +13,35 @@
        overflow: hidden;
        width: 300px;
        min-height: 150px;
+       background: transparent;
    }
    
    .card-wrapper {
        display: flex;
        transition: transform 0.7s cubic-bezier(.22,.55,.43,.77);
+       background: transparent;
    }
    
    .card {
        min-width: 100%;
        box-sizing: border-box;
-       border: 1px solid #ccc;
-       border-radius: 5px;
        padding: 20px;
-       background-color: #fff;
-       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-       height: 400px;
+       margin-right: 20px;
+       height: 300px;
+       color: white;
        /* position: relative;*/
+     
    } 
    
+   .card::before {
+    /* -webkit-backdrop-filter: blur(16px) saturate(180%); */
+    background-color: #6EACDA;
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    transform: translate(-50%, -20px);
+    z-index: -5;
+  }

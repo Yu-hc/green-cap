@@ -1,18 +1,17 @@
-document.addEventListener('DOMContentLoaded', function () {
-       const cardSwitcher = document.getElementById('toggle');
-       const cardWrapper = document.querySelector('.card-wrapper');
+// document.addEventListener('DOMContentLoaded', function () {
+//        const cardSwitcher = document.getElementById('toggleUseMail');
+//        const cardWrapper = document.querySelector('.card-wrapper');
    
-       function toggleCards() {
-           if (cardSwitcher.checked) {
-               cardWrapper.style.transform = 'translateX(-100%)';
-           } else {
-               cardWrapper.style.transform = 'translateX(0)';
-           }
-       }
+//        function toggleCards() {
+//            if (cardSwitcher.checked) {
+//                cardWrapper.style.transform = 'translateX(-320px)';
+//            } else {
+//                cardWrapper.style.transform = 'translateX(0)';
+//            }
+//        }
    
-       cardSwitcher.addEventListener('change', toggleCards);
+//        cardSwitcher.addEventListener('change', toggleCards);
    
-       // Initialize the view with the first card visible
-       toggleCards();
-   });
+//        // Initialize the view with the first card visible
+//    });
    
