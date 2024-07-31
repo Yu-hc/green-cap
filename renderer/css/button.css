@@ -1,4 +1,4 @@
-button {
+button#buttonLaunch {
 	display: inline-block;
 	align-items: center;
 	font-family: inherit;

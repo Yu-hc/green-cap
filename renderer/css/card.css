@@ -1,47 +1,50 @@
-/* body {
-       font-family: Arial, sans-serif;
-       display: flex;
-       justify-content: center;
-       align-items: center;
-       height: 100vh;
-       margin: 0;
-       background-color: #f0f0f0;
-   } */
-   
-   .container {
-       text-align: center;
-       overflow: hidden;
-       width: 300px;
-       min-height: 150px;
-       background: transparent;
-   }
-   
-   .card-wrapper {
-       display: flex;
-       transition: transform 0.7s cubic-bezier(.22,.55,.43,.77);
-       background: transparent;
-   }
-   
-   .card {
-       min-width: 100%;
-       box-sizing: border-box;
-       padding: 20px;
-       margin-right: 20px;
-       height: 300px;
-       color: white;
-       /* position: relative;*/
-     
-   } 
-   
-   .card::before {
-    /* -webkit-backdrop-filter: blur(16px) saturate(180%); */
-    background-color: #6EACDA;
-    content: '';
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    border-radius: 20px;
-    box-sizing: border-box;
-    transform: translate(-50%, -20px);
-    z-index: -5;
-  }
+.container {
+	text-align: center;
+	overflow: hidden;
+	width: 300px;
+	min-height: 150px;
+	background: transparent;
+}
+
+.card-wrapper {
+	display: flex;
+	transition: transform 0.7s cubic-bezier(0.22, 0.55, 0.43, 0.77);
+	background: transparent;
+}
+
+.card {
+	min-width: 100%;
+	box-sizing: border-box;
+	padding: 20px;
+	margin-right: 20px;
+	height: 350px;
+	color: white;
+	/* position: relative;*/
+}
+
+.card::before {
+	/* -webkit-backdrop-filter: blur(16px) saturate(180%); */
+	background-color: #6eacda;
+	content: "";
+	position: absolute;
+	width: 300px;
+	height: 350px;
+	border-radius: 20px;
+	box-sizing: border-box;
+	transform: translate(-50%, -20px);
+	z-index: -5;
+}
+#card-and-checkbox{
+    position: relative;
+}
+
+@keyframes card-move{
+    0%{
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(-550px);
+        opacity: 0;
+    }
+}

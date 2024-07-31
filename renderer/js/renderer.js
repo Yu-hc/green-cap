@@ -8,8 +8,7 @@ const toggleRandomCheck = document.getElementById("toggleRandomCheck")
 const toggleShowCrawler = document.getElementById("toggleShowCrawler")
 const toggleUseMail = document.getElementById("toggleUseMail")
 
-const buttonStartFilling = document.getElementById("buttonStartFilling")
-const buttonScrapeMail = document.getElementById("buttonScrapeMail")
+const buttonLaunch = document.getElementById("buttonLaunch")
 const buttonReset = document.getElementById('reset-btn')
 
 
@@ -61,12 +60,10 @@ toggleUseMail.addEventListener('change', () =>{
 })
 
 
-buttonStartFilling.addEventListener('click', () => {
-	ipcRenderer.send("button-startFilling")
+buttonLaunch.addEventListener('click', () => {
+	ipcRenderer.send("button-launch")
 })
-buttonScrapeMail.addEventListener('click', () => {
-	ipcRenderer.send("button-scrapeMail")
-})
+
 buttonReset.addEventListener('click', ()=>{
 	ipcRenderer.send("button-reset")
 })

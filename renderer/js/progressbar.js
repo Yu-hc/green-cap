@@ -1,4 +1,6 @@
 const move = document.getElementById("test-progress")
+const spanLaunch = document.getElementById("spanLaunch")
+const spanCardAndCheckbox = document.getElementById("card-and-checkbox")
 
 const shipContY = document.getElementById("ship-container-y")
 const shipContX = document.getElementById("ship-container-x")
@@ -18,7 +20,8 @@ move.addEventListener("click", () => {
 		fires[0].style.animation = "fire-start 2s ease-in-out"
 		fires[1].style.animation = "fire-start 2s ease-in-out"
 		fires[2].style.animation = "fire-start 2s ease-in-out"
-		planets[0].style.animation = "earth-leave 1.5s ease-in-out 0.8s forwards"
+		planets[0].style.animation = "earth-leave 1.5s ease-in 0.8s forwards"
+		spanCardAndCheckbox.style.animation = "card-move 1.8s ease-in 0.8s forwards"
 		bgs[0].style.animation = "bg-move-i0 1s linear 0.8s"
 		bgs[1].style.animation = "bg-move-i1 2s linear 0.8s"
 		bgs[2].style.animation = "bg-move-i2 3s linear 0.8s"
@@ -32,6 +35,7 @@ move.addEventListener("click", () => {
 			planets[i].style.top = String(top_) + "px"
 			planets[i].style.animation = "planet-pass 2s linear 1s forwards"
 			done = i
+			spanLaunch.innerHTML= String(i)
 		}
 	}
 	if (prep >= 6 && done == 5) {
@@ -72,6 +76,7 @@ let planetEventListener = (function () {
 				planets[i + 1].style.animation =
 					"planet-pass 2s linear 1s forwards"
 				done = i + 1
+				spanLaunch.innerHTML= String(i+1)
 			} else {
 				prep = i + 1
 			}

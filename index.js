@@ -297,14 +297,10 @@ ipcMain.on("toggle-useMail", (event, usemail) =>{
 	save_args()
 })
 
-ipcMain.on("button-startFilling", (event, arg) => {
+ipcMain.on("button-launch", (event, arg) => {
+	if(useMail) scrape()
 	main()
 })
-
-ipcMain.on("button-scrapeMail", (event, arg) => {
-	scrape()
-})
-
 ipcMain.on('button-reset', ()=>{
 	reset_args()
 })
