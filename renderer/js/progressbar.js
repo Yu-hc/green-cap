@@ -13,15 +13,17 @@ let prep = 0
 let done = 0
 
 // TODO change move to scrape mail and ipc.on
-move.addEventListener("click", () => {
+function progress() {
 	if (state == -1) {
 		shipContX.style.animation = "fly 1.5s ease-in-out forwards"
-              shipContY.style.animation = "oscillate 1s ease-in-out 1s infinite alternate"
+		shipContY.style.animation =
+			"oscillate 1s ease-in-out 1s infinite alternate"
 		fires[0].style.animation = "fire-start 2s ease-in-out"
 		fires[1].style.animation = "fire-start 2s ease-in-out"
 		fires[2].style.animation = "fire-start 2s ease-in-out"
 		planets[0].style.animation = "earth-leave 1.5s ease-in 0.8s forwards"
-		spanCardAndCheckbox.style.animation = "card-move 1.8s ease-in 0.8s forwards"
+		spanCardAndCheckbox.style.animation =
+			"card-move 1.8s ease-in 0.8s forwards"
 		bgs[0].style.animation = "bg-move-i0 1s linear 0.8s"
 		bgs[1].style.animation = "bg-move-i1 2s linear 0.8s"
 		bgs[2].style.animation = "bg-move-i2 3s linear 0.8s"
@@ -35,7 +37,6 @@ move.addEventListener("click", () => {
 			planets[i].style.top = String(top_) + "px"
 			planets[i].style.animation = "planet-pass 2s linear 1s forwards"
 			done = i
-			spanLaunch.innerHTML= String(i)
 		}
 	}
 	if (prep >= 6 && done == 5) {
@@ -44,8 +45,9 @@ move.addEventListener("click", () => {
 		done = 6
 	}
 	state++
-})
+}
 
+move.addEventListener("click", progress)
 
 shipContX.addEventListener("animationend", () => {
 	if (state >= 1 && done < 1) {
@@ -76,7 +78,6 @@ let planetEventListener = (function () {
 				planets[i + 1].style.animation =
 					"planet-pass 2s linear 1s forwards"
 				done = i + 1
-				spanLaunch.innerHTML= String(i+1)
 			} else {
 				prep = i + 1
 			}
@@ -84,19 +85,28 @@ let planetEventListener = (function () {
 	}
 })()
 
-let fireOscillateEventListener = (function(){
-	for (let i = 0; i <3 ; i++){
-		fires[i].addEventListener("animationend", ()=>{
-			fires[i].style.animation = "fire-f1 0.3s ease-in-out infinite alternate"
-		}, {once : true})
+let fireOscillateEventListener = (function () {
+	for (let i = 0; i < 3; i++) {
+		fires[i].addEventListener(
+			"animationend",
+			() => {
+				fires[i].style.animation =
+					"fire-f1 0.3s ease-in-out infinite alternate"
+			},
+			{ once: true }
+		)
 	}
 })()
 
-planets[5].addEventListener("animationstart", () => {
-	if (state >= 5 + 1 && done == 5) {
-		shipContX.style.left = "370px"
-		shipContX.style.animation = "fly2 1.5s ease-in 1s forwards"
-	} else {
-		prep = 5 + 1
-	}
-})
+planets[5].addEventListener(
+	"animationstart",
+	() => {
+		if (state >= 5 + 1 && done == 5) {
+			shipContX.style.left = "370px"
+			shipContX.style.animation = "fly2 1.5s ease-in 1s forwards"
+		} else {
+			prep = 5 + 1
+		}
+	},
+	{ once: true }
+)

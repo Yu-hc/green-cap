@@ -1,34 +1,112 @@
+:root {
+	--log-width: 200px;
+	--log-padding: 15px;
+	--launch-width: 100px;
+	--launch-height: 40px;
+}
+.nobr {
+	white-space: nowrap;
+}
+
+#header {
+	height: 0;
+	width: calc(var(--log-width) - var(--log-padding) * 2);
+	text-align: left;
+	overflow: hidden;
+	color: #7dd3fc;
+	position: absolute;
+	margin-top: calc(-1 * var(--log-padding));
+	padding-top: var(--log-padding);
+	background-color: #1e293b;
+	z-index: 3;
+	display: none;
+}
+#header_ {
+	height: 20px;
+	width: calc(var(--log-width) - var(--log-padding) * 2);
+	position: relative;
+	background-color: transparent;
+	z-index: 2;
+	display: none;
+}
+#header.show-header {
+	display: block;
+}
+#header_.show-header {
+	display: block;
+}
+
 button#buttonLaunch {
-	display: inline-block;
-	align-items: center;
-	font-family: inherit;
-	cursor: pointer;
-	font-weight: 500;
-	font-size: 17px;
-	padding: 0.8em 1.3em 0.8em 0.9em;
+	display: flex;
+	flex-direction: column;
 	color: white;
-	background: #ad5389;
-	background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+	background-color: #1e293b;
 	border: none;
 	letter-spacing: 0.05em;
-	border-radius: 16px;
-  
+	border-radius: 10px;
+	width: var(--launch-width);
+	height: var(--launch-height);
+	padding: var(--log-padding);
+	box-sizing: border-box; /* Include padding in the button's dimensions */
+}
+#button-text {
+	position: relative;
+	overflow: hidden;
+	z-index: 4;
+	left: calc(var(--launch-width) / 2 - var(--log-padding));
+	top: calc(var(--launch-height) / 2 - var(--log-padding));
+	transform: translate(-50%, -50%);
+}
+#buttonLaunch.animating {
+	animation: button-expand 2s forwards;
+	user-select: none;
+	overflow: scroll;
+}
+.log {
+	overflow: hidden;
+	font-family: "Courier New", Courier, monospace;
+	float: left;
+	padding: 1px;
+	position: relative;
+}
+.edge {
+	width: fit-content;
 }
 
-button svg {
-	margin-right: 3px;
-	transform: rotate(30deg);
-	transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+@keyframes header-appear {
+	0% {
+		height: 0;
+	}
+	100% {
+		height: calc(20px + var(--log-padding));
+		border-bottom: 1px solid #7dd3fc;
+	}
 }
 
-button span {
-	transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+@keyframes typing {
+	0% {
+		width: 0%;
+	}
+	100% {
+		width: 100%;
+	}
 }
 
-button:hover svg {
-	transform: translateX(5px) rotate(90deg);
+@keyframes button-expand {
+	0% {
+		width: 100px;
+		height: 40px;
+	}
+	100% {
+		width: var(--log-width);
+		height: 100px;
+	}
 }
-
-button:hover span {
-	transform: translateX(7px);
+@keyframes text-shrink {
+	0% {
+		width: 100%;
+	}
+	100% {
+		width: 0;
+	}
 }

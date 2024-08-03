@@ -34,17 +34,17 @@
 	transform: translate(-50%, -20px);
 	z-index: -5;
 }
-#card-and-checkbox{
-    position: relative;
+#card-and-checkbox {
+	position: relative;
 }
 
-@keyframes card-move{
-    0%{
-        transform: translateX(0);
-        opacity: 1;
-    }
-    100%{
-        transform: translateX(-550px);
-        opacity: 0;
-    }
+@keyframes card-move {
+	0% {
+		transform: translateX(0);
+		opacity: 1;
+	}
+	100% {
+		transform: translateX(-550px);
+		opacity: 0;
+	}
 }

@@ -4,3 +4,4 @@ viewer.js
 out
 git-filter-repo.txt
 renderer/test
+.vscode

@@ -1,25 +1,24 @@
 # Form filler
 
-An app to fill the teaching evaluation form from NTUCM
+一款可以填寫臺大醫學系redcap問卷的程式
 
-We all agree that the professors from National Taiwan University College of Medicine are extraordinary; therefore, it doesn't seem  necessary to spend a lot of time filling the teaching evaluation form weekly. Yet by filling the form can give you a  
+相信大部分的人都跟我一樣，認為台大醫學系的教授不管是在教案內容以及事前準備上都無可挑剃，而身為台灣最高學府的學生，上課時的自我評估也
+基本上沒有太大的問題，每週發的課程教學效果調查表似乎都只是為了0.5分在做形式上的填寫。因此，此程式可以幫助你自動填寫課程教學效果調查
+表，為每個禮拜省下五分鐘（一學期就省下80分鐘了）。（如果有對於教學內容有特殊評價，建議自己手動填寫）
 
+## 下載
 
-## Download
+前往[releases](https://github.com/Yu-hc/form_filler/releases)頁面下載最新版本
 
-Check the [releases](https://github.com/Yu-hc/form_filler/releases) page for latest release
+## 使用步驟
 
-## How to use
+1. 下載並且開啟redcap程式
+2. 輸入ntu webmail的帳號密碼或者手動貼上表單連結
+3. 按下 launch 並等待程式執行完畢
 
-1. download and launch the appilcation
-2. enter the username and password for ntu webmail or enter the form url manually
-3. press launch button and wait until the app to finish filling
-
-> if you choose to enter username and password, the app will automatically scrape the form url in your mail account
-
-
-
-## prerequisite
+> 如果選擇輸入ntu webmail的帳號密碼，程式會從信箱爬取最新的表單連結
+---
+## Prerequisite
 
 - any code editor
 - [node.js](https://nodejs.org/en)
@@ -47,3 +46,49 @@ npm run make
 ```
 
 should create a `out` folder with bundled app inside
+
+# Form Filler
+
+A program designed to fill out NTU Medical School Redcap questionnaires.
+
+Most people, like myself, believe that the professors at NTU Medical School are impeccable in terms of their course content and preparation. As students of Taiwan's premier university, our self-assessments during classes are generally problem-free. The weekly course teaching effectiveness surveys seem to be a formality just for the sake of 0.5 points. Therefore, this program can help you automatically fill out the course teaching effectiveness surveys, saving you five minutes each week (80 minutes in a semester). If you have specific feedback on the teaching content, it's recommended to fill it out manually.
+
+## Download
+
+Go to the [releases](https://github.com/Yu-hc/form_filler/releases) page to download the latest version.
+
+## Instructions
+
+1. Download and open the Redcap program.
+2. Enter your NTU Webmail account and password or manually paste the form link.
+3. Click launch and wait for the program to complete.
+
+> If you choose to enter your NTU Webmail account and password, the program will scrape the latest form link from your email.
+
+## Prerequisites
+
+- Any code editor
+- [Node.js](https://nodejs.org/en)
+
+## Install
+
+```shell
+npm install
+```
+
+This command will install all the dependencies listed in package.json.
+
+## Execute
+
+```shell
+npm start
+```
+This command will build and launch the app.
+
+## Pack
+
+```shell
+npm run make
+```
+
+This command will create an executable app depending on your OS.
