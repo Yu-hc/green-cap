@@ -1,6 +1,6 @@
 # Form filler
 
-## an app to fill the teaching evaluation form from NTUCM
+An app to fill the teaching evaluation form from NTUCM
 
 We all agree that the professors from National Taiwan University College of Medicine are extraordinary; therefore, it doesn't seem  necessary to spend a lot of time filling the teaching evaluation form weekly. Yet by filling the form can give you a  
 
