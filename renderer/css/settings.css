@@ -1,124 +1,118 @@
-
-#settings-page{
-       width: 600px;
-       height: 0px;
-       background-color: #1F2544;
-       position: absolute;
-       bottom : 50px;
-       left : 100px;
-       border-radius: 10px;
-       flex-direction: row;
-       z-index: 20;
-       display: none;
-       opacity: 0;
-       transition-property: overlay display opacity;
-       transition-duration: 1s;
-       transition-behavior: allow-discrete;
-      
+#settings-page {
+	width: 600px;
+	height: 0px;
+	background-color: #1f2544;
+	position: absolute;
+	bottom: 50px;
+	left: 100px;
+	border-radius: 10px;
+	flex-direction: row;
+	z-index: 20;
+	display: none;
+	opacity: 0;
+	transition-property: overlay display opacity;
+	transition-duration: 1s;
+	transition-behavior: allow-discrete;
 }
 
 #settings-page[open] {
-       display: block;
-       opacity: 1;
-       height: 500px;
-       
-  
-       @starting-style {
-              opacity: 0;
-              height : 0px;
-       }
+	display: block;
+	opacity: 1;
+	height: 500px;
+
+	@starting-style {
+		opacity: 0;
+		height: 0px;
+	}
 }
 
-
-.settings-title{
-       position: relative;
-       width: 500px;
-       height:30px;
-       left :50px; 
-       border-radius: 10px;
-       margin-top: 30px;
-       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-       font-weight: bold;
-       font-size: x-large;
-       color: white;
+.settings-title {
+	position: relative;
+	width: 500px;
+	height: 30px;
+	left: 50px;
+	border-radius: 10px;
+	margin-top: 30px;
+	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	font-size: x-large;
+	color: white;
 }
-.settings-config{
-       background-color:#474F7A;
-       position: relative;
-       width: 500px;
-       height:50px;
-       left :50px; 
-       border-radius: 10px;
-       margin-top: 30px;
-       text-align: left;
+.settings-config {
+	background-color: #474f7a;
+	position: relative;
+	width: 500px;
+	height: 50px;
+	left: 50px;
+	border-radius: 10px;
+	margin-top: 30px;
+	text-align: left;
 
+	display: none;
+	opacity: 0;
+	transition-property: overlay display opacity;
+	transition-duration: 0.4s;
+	transition-behavior: allow-discrete;
+}
+.settings-config[open] {
+	display: block;
+	opacity: 1;
+	transition-delay: 0.4s;
+	transition-duration: 0.6s;
+	@starting-style {
+		opacity: 0;
+	}
+}
+.config-text {
+	text-align: left;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 20px;
+	font-family: monospace;
+	font-size: medium;
+	color: white;
+}
 
-       display: none;
-       opacity: 0;
-       transition-property: overlay display opacity;
-       transition-duration: 0.4s;
-       transition-behavior: allow-discrete;
-} 
-.settings-config[open]{
-       display: block;
-       opacity: 1;
-       transition-delay: 0.4s;
-       transition-duration: 0.6s;
-       @starting-style {
-              opacity: 0;
-       }
+#settings-button {
+	position: absolute;
+	bottom: 40px;
+	left: 40px;
+	height: 50px;
+	width: 50px;
+	border: none;
+	margin: 0px;
+	padding: 0px;
+	background: none;
 }
-.config-text{
-       text-align: left;
-       position: absolute;
-       top : 50%;
-       transform: translateY(-50%);
-       left : 20px;
-       font-family: monospace;
-       font-size: medium;
-       color: white;
+#settings-icon {
+	position: relative;
+	left: 0px;
+	height: 50px;
+	width: 50px;
 }
-
-
-#settings-button{
-       position: absolute;
-       bottom : 40px;
-       left : 40px;
-       height: 50px;
-       width: 50px;
-       border: none;
-       margin: 0px;
-       padding: 0px;
-       background:none;
+#reset-btn {
+	text-align: left;
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	transform: translateY(-50%);
+	left: 20px;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	background: none;
+	color: white;
+	font-family: monospace;
+	font-size: medium;
 }
-#settings-icon{
-       position: relative;
-       left: 0px;
-       height: 50px;
-       width: 50px;
-  
-}
-#reset-btn{
-       text-align: left;
-       position: absolute;
-       top : 50%;
-       width: 100%;
-       transform: translateY(-50%);
-       left : 20px;
-       margin: 0;
-       border: 0;
-       padding: 0;
-       background: none;
-       color: white;
-       font-family: monospace;
-       font-size: medium;
-} 
 
 @keyframes rotate-settings {
-      0%{
-       transform: rotate(0deg);
-      } 
-      100%{
-       transform: rotate(270deg);
-      }
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(270deg);
+	}
 }

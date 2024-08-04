@@ -1,4 +1,4 @@
-const move = document.getElementById("test-progress")
+// const move = document.getElementById("test-progress")
 const spanLaunch = document.getElementById("spanLaunch")
 const spanCardAndCheckbox = document.getElementById("card-and-checkbox")
 
@@ -30,6 +30,7 @@ function progress() {
 		bgs[3].style.animation = "bg-move-i3 4s linear 0.8s"
 		bgs[4].style.animation = "bg-move-i4 5s linear 0.8s"
 		bgs[5].style.animation = "bg-move-i5 6s linear 0.8s"
+		buttonAnimate()
 	}
 	for (let i = 1; i < 6; i++) {
 		if (prep >= i && done == i - 1) {
@@ -47,7 +48,7 @@ function progress() {
 	state++
 }
 
-move.addEventListener("click", progress)
+// move.addEventListener("click", progress)
 
 shipContX.addEventListener("animationend", () => {
 	if (state >= 1 && done < 1) {

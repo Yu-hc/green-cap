@@ -30,7 +30,6 @@ const NOTIFICATION_BODY = "Notification from the Main process"
 
 let mainWindow
 
-// console.log(sp.redcapSender)
 function delay(time) {
 	return new Promise(function (resolve) {
 		setTimeout(resolve, time)
@@ -63,14 +62,29 @@ const load_args = async () => {
 	if (exist) {
 		let sData = fs.readFileSync("data/data.json")
 		let datas = JSON.parse(sData)
+
+		// load values to index.js
+		string_webmailUser = datas.string_webmailUser
+		string_webmailPsswd = datas.string_webmailPsswd
+		showCrawler = datas.showCrawler
+		formUrl = datas.formUrl
+		discussGroup = datas.discussGroup
+		discussTopic = datas.discussTopic
+		int_evaluationScore = datas.int_evaluationScore
+		string_suggestion = datas.string_suggestion
+		randomSuggestion = datas.randomSuggestion
+		randomCheck = datas.randomCheck
+		useMail = datas.useMail
+
+		// send datas to frontend
 		mainWindow.webContents.send("load-datas", datas)
 	}
 }
-const reset_args = async() =>{
+const reset_args = async () => {
 	let existDefault = fs.existsSync("data/default.json")
 	let existData = fs.existsSync("data/data.json")
-	if(existData && existDefault){
-		let sDefault = fs.readFileSync('data/default.json')
+	if (existData && existDefault) {
+		let sDefault = fs.readFileSync("data/default.json")
 		fs.writeFileSync("data/data.json", sDefault)
 	}
 	load_args()
@@ -103,15 +117,20 @@ const main = async () => {
 	const page = await pie.getPage(browser, window)
 
 	await window.loadURL(formUrl)
-	// await window.loadFile(formUrl)
 	// TODO: set timout for loadurl , handle error
 	const innerHtml_pages = await page.$eval(sp.pages, (el) => el.innerHTML)
 	const int_totalPages = Number(innerHtml_pages[innerHtml_pages.length - 2])
+
+	mainWindow.webContents.send("progress-totalPages", int_totalPages)
+
 	for (let int_page = 0; int_page < int_totalPages; int_page++) {
 		/*
 		fill in the score and suqqestions
 		*/
 		await delay(1000)
+		// send the current page to frontend(log and progress bar)
+		mainWindow.webContents.send("progress-currentPage", int_page)
+
 		if (int_page == 0) {
 			await page.type(sp.discussTopic, discussTopic)
 			// go to next page
@@ -135,9 +154,8 @@ const main = async () => {
 			await page.click(sp.nextPage2)
 		}
 	}
-	await delay(arg_pauseBeforeAction)
+	mainWindow.webContents.send("messages", "done :)")
 	window.destroy()
-	mainWindow.webContents.send("crawler-closed")
 }
 
 const scrape = async () => {
@@ -156,6 +174,8 @@ const scrape = async () => {
 	await page.type(sp.username, string_webmailUser)
 	await page.type(sp.password, string_webmailPsswd)
 	await page.click(sp.login)
+
+	mainWindow.webContents.send("messages", "scraping mail...")
 
 	await delay(arg_pauseBeforeAction * 2)
 
@@ -261,46 +281,43 @@ ipcMain.on("input-webmailUser", (event, user) => {
 ipcMain.on("input-webmailPsswd", (event, psswd) => {
 	string_webmailPsswd = String(psswd)
 	save_args()
-
 })
 
 ipcMain.on("input-formUrl", (event, url) => {
 	formUrl = String(url)
 	save_args()
-
 })
 
 ipcMain.on("input-discussGroup", (event, discussgroup) => {
 	discussGroup = discussgroup
 	save_args()
-
 })
 
 ipcMain.on("toggle-randomSuggestion", (event, randomsuggestion) => {
 	randomSuggestion = randomsuggestion
 	save_args()
-
 })
 
 ipcMain.on("toggle-randomCheck", (event, randomcheck) => {
 	randomCheck = randomcheck
 	save_args()
-
 })
 ipcMain.on("toggle-showCrawler", (event, showcrawler) => {
 	showCrawler = showcrawler
 	save_args()
-
 })
-ipcMain.on("toggle-useMail", (event, usemail) =>{
+ipcMain.on("toggle-useMail", (event, usemail) => {
 	useMail = usemail
 	save_args()
 })
 
 ipcMain.on("button-launch", (event, arg) => {
-	if(useMail) scrape()
+	if (useMail) {
+		scrape().then(() => main())
+		return
+	}
 	main()
 })
-ipcMain.on('button-reset', ()=>{
+ipcMain.on("button-reset", () => {
 	reset_args()
 })

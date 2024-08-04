@@ -4,14 +4,15 @@ let lastLine = document.getElementById("header_")
 const header = document.getElementById("header")
 const header_ = document.getElementById("header_")
 // const move = document.getElementById("test-progress")
-const tl = document.getElementById("test-log")
-
+// const tl = document.getElementById("test-log")
+let logCache = []
 let eventCounter = 0
+let logAnimationDone = 0
 
-move.addEventListener("click", () => {
-	let animationTime = 0.4
+function buttonAnimate() {
 	buttonText.style.animation = "text-shrink 0.4s steps(6,end) forwards"
-})
+}
+// move.addEventListener("click", buttonAnimate)
 buttonText.addEventListener(
 	"animationend",
 	() => {
@@ -28,7 +29,20 @@ buttonLaunch.addEventListener("animationend", () => {
 		header.style.animation = "header-appear 1s forwards"
 	}
 })
-
+header.addEventListener("animationend", () => {
+	logAnimationDone = 1
+	while (logCache.length != 0) {
+		add_log(logCache.shift())
+	}
+})
+function ready_log(log) {
+	logCache.push(log)
+	if (logAnimationDone == 1) {
+		while (logCache.length != 0) {
+			add_log(logCache.shift())
+		}
+	}
+}
 function add_log(log) {
 	const newDiv = document.createElement("div")
 	newDiv.classList.add("edge")
@@ -48,6 +62,4 @@ function add_log(log) {
 
 	lastLine = newDiv
 }
-tl.addEventListener("click", () => {
-	add_log("abc")
-})
+
