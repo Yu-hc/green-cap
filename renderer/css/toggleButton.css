@@ -1,13 +1,17 @@
+:root{
+	--toggle-color: #FFFFFF;
+	
+}
 .toggleContainer {
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	width: fit-content;
-	border: 3px solid #343434;
+	border: 3px solid var(--toggle-color);
 	border-radius: 20px;
-	background: #343434;
+	background: var(--toggle-color);
 	font-weight: bold;
-	color: #343434;
+	color: var(--card-color);
 	cursor: pointer;
 	left: 50%;
 	transform: translateX(-50%);
@@ -20,7 +24,7 @@
 	height: 100%;
 	left: 0%;
 	border-radius: 20px;
-	background: white;
+	background: var(--card-color);
 	transition: all 0.7s;
 }
 .toggleCheckbox:checked + .toggleContainer::before {
@@ -35,18 +39,18 @@
 	display: none;
 }
 .toggleCheckbox:checked + .toggleContainer div:first-child {
-	color: white;
+	color: var(--card-color);
 	transition: color 0.3s;
 }
 .toggleCheckbox:checked + .toggleContainer div:last-child {
-	color: #343434;
+	color: var(--toggle-color);
 	transition: color 0.3s;
 }
 .toggleCheckbox + .toggleContainer div:first-child {
-	color: #343434;
+	color: var(--toggle-color);
 	transition: color 0.3s;
 }
 .toggleCheckbox + .toggleContainer div:last-child {
-	color: white;
+	color: var(--card-color);
 	transition: color 0.3s;
 }

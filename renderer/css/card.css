@@ -1,3 +1,8 @@
+:root{
+	/* --card-color : #93A8AC; */
+	--card-color : #61677A;
+	--card-text-color : #FFFFFF;
+}
 .container {
 	text-align: center;
 	overflow: hidden;
@@ -18,13 +23,13 @@
 	padding: 20px;
 	margin-right: 20px;
 	height: 350px;
-	color: white;
+	color: var(--card-text-color);
 	/* position: relative;*/
 }
 
 .card::before {
 	/* -webkit-backdrop-filter: blur(16px) saturate(180%); */
-	background-color: #6eacda;
+	background-color:var(--card-color);
 	content: "";
 	position: absolute;
 	width: 300px;

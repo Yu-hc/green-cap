@@ -6,7 +6,7 @@ const fs = require("fs")
 const sp = require("./data/constants/selectorPath")
 const str = require("./data/constants/string")
 
-const isDev = process.env.NODE_ENV !== "production"
+const isDev = process.env.NODE_ENV == "production"
 
 // args for web crawler
 let string_webmailUser = "b11401090"
