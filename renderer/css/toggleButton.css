@@ -1,5 +1,5 @@
 :root{
-	--toggle-color: #FFFFFF;
+	--toggle-color: var(--card-text-color);
 	
 }
 .toggleContainer {

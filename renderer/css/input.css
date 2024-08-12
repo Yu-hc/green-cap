@@ -4,6 +4,9 @@
 *::after {
 	box-sizing: border-box;
 }
+:root{
+	--border-color: var(--card-text-color);
+}
 
 .custom-field {
 	position: relative;
@@ -74,7 +77,7 @@
 /* ONE */
 .custom-field.one input {
 	background: none;
-	border: 2px solid #ddd;
+	border: 2px solid var(--border-color);
 	transition: border-color 0.3s ease;
 }
 
@@ -86,7 +89,7 @@
 .custom-field.one input.dirty,
 .custom-field.one input:not(:placeholder-shown),
 .custom-field.one input:focus {
-	border-color: var(--card-text-color);
+	border-color: var(--border-color);
 	transition-delay: 0.1s;
 }
 
