@@ -1,18 +1,15 @@
-// const buttonLaunch = document.getElementById("buttonLaunch")
 const buttonText = document.getElementById("button-text")
 let lastLine = document.getElementById("header_")
 const header = document.getElementById("header")
 const header_ = document.getElementById("header_")
-// const move = document.getElementById("test-progress")
-// const tl = document.getElementById("test-log")
 let logCache = []
 let eventCounter = 0
 let logAnimationDone = 0
 
+// remove the 'launch' text from button
 function buttonAnimate() {
 	buttonText.style.animation = "text-shrink 0.4s steps(6,end) forwards"
 }
-// move.addEventListener("click", buttonAnimate)
 buttonText.addEventListener(
 	"animationend",
 	() => {
@@ -21,6 +18,8 @@ buttonText.addEventListener(
 	},
 	{ once: true }
 )
+
+// animate launch button to console 
 buttonLaunch.addEventListener("animationend", () => {
 	eventCounter++
 	if (eventCounter == 2) {
@@ -29,12 +28,16 @@ buttonLaunch.addEventListener("animationend", () => {
 		header.style.animation = "header-appear 1s forwards"
 	}
 })
+
+// animate all undone log animations
 header.addEventListener("animationend", () => {
 	logAnimationDone = 1
 	while (logCache.length != 0) {
 		add_log(logCache.shift())
 	}
 })
+
+// put log into logCache, animate if header is ready
 function ready_log(log) {
 	logCache.push(log)
 	if (logAnimationDone == 1) {
@@ -43,6 +46,8 @@ function ready_log(log) {
 		}
 	}
 }
+
+// animate log
 function add_log(log) {
 	const newDiv = document.createElement("div")
 	newDiv.classList.add("edge")

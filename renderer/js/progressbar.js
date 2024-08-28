@@ -1,4 +1,3 @@
-// const move = document.getElementById("test-progress")
 const spanLaunch = document.getElementById("spanLaunch")
 const spanCardAndCheckbox = document.getElementById("card-and-checkbox")
 
@@ -9,11 +8,19 @@ const planets = document.getElementsByClassName("planet")
 const bgs = document.getElementsByClassName("bg")
 const fires = document.getElementsByClassName("fire")
 let state = -1
-let prep = 0
-let done = 0
+let prep = 0 // prep for the ready progress
+let done = 0 // done for the latest progress
 
-// TODO change move to scrape mail and ipc.on
+let background_queue = [0,1,2,3,4,5]
+// background cycle animation
+const bgAnimation = (event) =>{
+	background_queue.shift()
+	background_queue.push(event.currentTarget.I)
+	bgs[event.currentTarget.I].style.animation = "bg-move 6s linear infinite forwards"
+}
+// animation initialization and progress state
 function progress() {
+	// console.log('aa')
 	if (state == -1) {
 		shipContX.style.animation = "fly 1.5s ease-in-out forwards"
 		shipContY.style.animation =
@@ -40,16 +47,23 @@ function progress() {
 			done = i
 		}
 	}
+	// ship leave animation
 	if (prep >= 6 && done == 5) {
 		shipContX.style.left = "370px"
 		shipContX.style.animation = "fly2 1.5s ease-in 1s forwards"
 		done = 6
+		for (let i = 0; i < 6; i++) {
+			let j = background_queue[i]
+			bgs[j].addEventListener("animationiteration", ()=>{
+				bgs[j].style.animation = `bg-stop-i${i} ${6-i}s linear forwards`
+			} , {once: true})
+		}
+		
 	}
 	state++
 }
 
-// move.addEventListener("click", progress)
-
+// ship launch animation
 shipContX.addEventListener("animationend", () => {
 	if (state >= 1 && done < 1) {
 		let top_ = Math.floor(Math.random() * 200) + 125
@@ -61,15 +75,21 @@ shipContX.addEventListener("animationend", () => {
 	}
 })
 
+
 let bgEventListener = (function () {
 	for (let i = 0; i < 6; i++) {
-		bgs[i].addEventListener("animationend", () => {
-			bgs[i].style.animation = "bg-move 6s linear infinite"
-		})
+		bgs[i].addEventListener("animationend", bgAnimation ,{once: true} , true )
+		bgs[i].I = i
+		// background_queue is the background present order
+		bgs[i].addEventListener("animationiteration", (event)=>{
+			background_queue.shift()
+			background_queue.push(event.currentTarget.I)
+			console.log(background_queue)
+		} ,{once: false} , true )
 	}
 })()
-// bgEventListener();
 
+// planet move animation
 let planetEventListener = (function () {
 	for (let i = 1; i < 5; i++) {
 		planets[i].addEventListener("animationstart", () => {
@@ -86,6 +106,7 @@ let planetEventListener = (function () {
 	}
 })()
 
+// fire animation
 let fireOscillateEventListener = (function () {
 	for (let i = 0; i < 3; i++) {
 		fires[i].addEventListener(
@@ -99,12 +120,19 @@ let fireOscillateEventListener = (function () {
 	}
 })()
 
+// planets' animation, start when the previous is started
 planets[5].addEventListener(
 	"animationstart",
 	() => {
 		if (state >= 5 + 1 && done == 5) {
 			shipContX.style.left = "370px"
 			shipContX.style.animation = "fly2 1.5s ease-in 1s forwards"
+			for (let i = 0; i < 6; i++) {
+				let j = background_queue[i]
+				bgs[j].addEventListener("animationiteration", ()=>{
+					bgs[j].style.animation = `bg-stop-i${i} ${6-i}s linear forwards`
+				} , {once: true})
+			}
 		} else {
 			prep = 5 + 1
 		}
