@@ -25,6 +25,7 @@ let stringArray_RandomSuggestion
 let useMail = true
 
 let arg_pauseBeforeAction = 500
+let pathUserData = app.getPath("userData") 
 
 const NOTIFICATION_TITLE = "Basic Notification"
 const NOTIFICATION_BODY = "Notification from the Main process"
@@ -59,11 +60,10 @@ const loadRandomComments = async () => {
 	stringArray_RandomSuggestion = $.split("\n")
 }
 const load_args = async () => {
-	let exist = fs.existsSync("data/data.json")
+	let exist = fs.existsSync(path.join(pathUserData,"./data.json"))
 	if (exist) {
-		let sData = fs.readFileSync("data/data.json")
+		let sData = fs.readFileSync(path.join(pathUserData,"./data.json"))
 		let datas = JSON.parse(sData)
-
 		// load values to index.js
 		string_webmailUser = datas.string_webmailUser
 		string_webmailPsswd = datas.string_webmailPsswd
@@ -76,7 +76,6 @@ const load_args = async () => {
 		randomSuggestion = datas.randomSuggestion
 		randomCheck = datas.randomCheck
 		useMail = datas.useMail
-
 		// send datas to frontend
 		mainWindow.webContents.send("load-datas", datas)
 	}
@@ -114,7 +113,7 @@ function save_args() {
 		useMail,
 	}
 	let sData = JSON.stringify(datas)
-	fs.writeFileSync("data/data.json", sData)
+	fs.writeFileSync(path.join(pathUserData,"./data.json"), sData)
 	// fs.writeFileSync(path.join(app.getPath('userData'), './data/data.json'), sData)
 }
 
