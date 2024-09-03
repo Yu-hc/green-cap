@@ -5,6 +5,7 @@ const puppeteer = require("puppeteer-core")
 const fs = require("fs")
 const sp = require("./data/constants/selectorPath")
 const str = require("./data/constants/string")
+const defaults = require("./data/constants/default")
 
 const isDev = process.env.NODE_ENV == "production"
 
@@ -81,13 +82,22 @@ const load_args = async () => {
 	}
 }
 const reset_args = async () => {
-	let existDefault = fs.existsSync("data/default.json")
-	let existData = fs.existsSync("data/data.json")
-	if (existData && existDefault) {
-		let sDefault = fs.readFileSync("data/default.json")
-		fs.writeFileSync("data/data.json", sDefault)
+	// TODO: reset args with defaults
+	let datas = {
+		string_webmailUser: defaults.string_webmailUser,
+		string_webmailPsswd: defaults.string_webmailPsswd,
+		showCrawler: defaults.showCrawler,
+		formUrl: defaults.formUrl,
+		discussGroup: defaults.discussGroup,
+		discussTopic: defaults.discussTopic,
+		int_evaluationScore: defaults.int_evaluationScore,
+		string_suggestion: defaults.int_evaluationScore,
+		randomSuggestion: defaults.randomSuggestion,
+		randomCheck: defaults.randomCheck,
+		useMail: defaults.useMail,
 	}
-	load_args()
+	// send datas to frontend
+	mainWindow.webContents.send("load-datas", datas)
 }
 function save_args() {
 	let datas = {
@@ -105,6 +115,7 @@ function save_args() {
 	}
 	let sData = JSON.stringify(datas)
 	fs.writeFileSync("data/data.json", sData)
+	// fs.writeFileSync(path.join(app.getPath('userData'), './data/data.json'), sData)
 }
 
 const main = async () => {
@@ -178,11 +189,10 @@ const scrape = async () => {
 	await delay(arg_pauseBeforeAction * 2)
 
 	// Check if user and password is correct
-	try{
+	try {
 		await page.click(sp.login)
-	}
-	catch(e){
-		mainWindow.webContents.send("messages", "wrong user or password")
+	} catch (e) {
+		mainWindow.webContents.send("messages", "wrong user password")
 	}
 
 	mainWindow.webContents.send("messages", "scraping mail...")
@@ -190,7 +200,7 @@ const scrape = async () => {
 	// disable scraping function
 	window.destroy()
 	mainWindow.webContents.send("crawler-closed")
-	return;
+	return
 	let gotMail = 0
 	// TODO: move page.click(sp.nextPageWebmail) to last and set max page
 	for (let int_currentPage = 1; int_currentPage < 6; int_currentPage++) {
