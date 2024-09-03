@@ -175,14 +175,26 @@ const scrape = async () => {
 	await page.type(sp.password, string_webmailPsswd)
 	await page.click(sp.login)
 
-	mainWindow.webContents.send("messages", "scraping mail...")
-
 	await delay(arg_pauseBeforeAction * 2)
 
+	// Check if user and password is correct
+	try{
+		await page.click(sp.login)
+	}
+	catch(e){
+		mainWindow.webContents.send("messages", "wrong user or password")
+	}
+
+	mainWindow.webContents.send("messages", "scraping mail...")
+
+	// disable scraping function
+	window.destroy()
+	mainWindow.webContents.send("crawler-closed")
+	return;
 	let gotMail = 0
+	// TODO: move page.click(sp.nextPageWebmail) to last and set max page
 	for (let int_currentPage = 1; int_currentPage < 6; int_currentPage++) {
 		if (gotMail) break
-
 		await page.click(sp.nextPageWebmail)
 
 		await delay(arg_pauseBeforeAction * 2)
