@@ -81,7 +81,6 @@ const load_args = async () => {
 	}
 }
 const reset_args = async () => {
-	// TODO: reset args with defaults
 	let datas = {
 		string_webmailUser: defaults.string_webmailUser,
 		string_webmailPsswd: defaults.string_webmailPsswd,
