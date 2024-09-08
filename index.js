@@ -273,6 +273,7 @@ function createWindow() {
 		mainWindow.webContents.openDevTools()
 	}
 	mainWindow.loadFile(path.join(__dirname, "./renderer/index.html"))
+	mainWindow.setMenuBarVisibility(false)
 	mainWindow.webContents.on("did-finish-load", () => {
 		load_args()
 	})
