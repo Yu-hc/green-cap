@@ -12,16 +12,15 @@ const isDev = process.env.NODE_ENV == "production"
 // args for web crawler
 let string_webmailUser = ""
 let string_webmailPsswd = ""
-let showCrawler = true
-let formUrl =
-	""
+let showCrawler = false
+let formUrl = ""
 let discussGroup = 0
 let discussTopic = ""
 let int_evaluationScore = 1
 let string_suggestion = ""
 let randomSuggestion = false
 let randomCheck = false
-let stringArray_RandomSuggestion
+let stringArray_RandomSuggestion = str.randomSuggestion
 let useMail = true
 
 let arg_pauseBeforeAction = 500
@@ -55,10 +54,6 @@ function getSuggestion() {
 	]
 }
 
-const loadRandomComments = async () => {
-	let $ = fs.readFileSync("./randomSuggestion.txt", "utf-8")
-	stringArray_RandomSuggestion = $.split("\n")
-}
 const load_args = async () => {
 	let exist = fs.existsSync(path.join(pathUserData, "./data.json"))
 	if (exist) {
@@ -127,50 +122,56 @@ const main = async () => {
 
 	await window.loadURL(formUrl)
 	// TODO: set timout for loadurl , handle error
-	const innerHtml_pages = await page.$eval(sp.pages, (el) => el.innerHTML)
-	let int_totalPages
-	// if > 10 pages, length will > 11
-	if (innerHtml_pages.length > 11) {
-		int_totalPages =
-			Number(innerHtml_pages[innerHtml_pages.length - 3]) +
-			Number(innerHtml_pages[innerHtml_pages.length - 4]) * 10
-	} else {
-		int_totalPages = Number(innerHtml_pages[innerHtml_pages.length - 3])
-	}
-	mainWindow.webContents.send("progress-totalPages", int_totalPages)
+	try {
+		const innerHtml_pages = await page.$eval(sp.pages, (el) => el.innerHTML)
+		let int_totalPages
+		// if > 10 pages, length will > 11
+		if (innerHtml_pages.length > 11) {
+			int_totalPages =
+				Number(innerHtml_pages[innerHtml_pages.length - 3]) +
+				Number(innerHtml_pages[innerHtml_pages.length - 4]) * 10
+		} else {
+			int_totalPages = Number(innerHtml_pages[innerHtml_pages.length - 3])
+		}
+		mainWindow.webContents.send("progress-totalPages", int_totalPages)
 
-	for (let int_page = 0; int_page < int_totalPages; int_page++) {
-		/*
+		for (let int_page = 0; int_page < int_totalPages; int_page++) {
+			/*
 		fill in the score and suqqestion
 		*/
-		await delay(1000)
-		// send the current page to frontend(log and progress bar)
-		mainWindow.webContents.send("progress-currentPage", int_page)
+			await delay(1000)
+			// send the current page to frontend(log and progress bar)
+			mainWindow.webContents.send("progress-currentPage", int_page)
 
-		if (int_page == 0) {
-			// await page.type(sp.discussTopic, discussTopic)
-			// go to next page
-			await page.click(sp.nextPage1)
-		} else {
-			// go to next page
-			for (let div = 0; div < 4; div++) {
-				await page.click(
-					`xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[${String(
-						div + 3
-					)}]/td[2]/table/tbody/tr/td[${String(
-						getEvaluationScore() + 2
-					)}]/input`
-				)
+			if (int_page == 0) {
+				// await page.type(sp.discussTopic, discussTopic)
+				// go to next page
+				await page.click(sp.nextPage1)
+			} else {
+				// go to next page
+				for (let div = 0; div < 4; div++) {
+					await page.click(
+						`xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[${String(
+							div + 3
+						)}]/td[2]/table/tbody/tr/td[${String(
+							getEvaluationScore() + 2
+						)}]/input`
+					)
+					await delay(arg_pauseBeforeAction)
+				}
+				await page.type(sp.suggestion, getSuggestion())
 				await delay(arg_pauseBeforeAction)
+				if (int_page != int_totalPages - 1)
+					await page.click(sp.nextPage2)
 			}
-			await page.type(sp.suggestion, getSuggestion())
-			await delay(arg_pauseBeforeAction)
-			if (int_page != int_totalPages - 1) await page.click(sp.nextPage2)
 		}
+		mainWindow.webContents.send("messages", "done :)")
+		await delay(arg_pauseBeforeAction * 5)
+	} catch (e) {
+		mainWindow.webContents.send("messages", "failed :(")
+	} finally {
+		window.destroy()
 	}
-	mainWindow.webContents.send("messages", "done :)")
-	await delay(arg_pauseBeforeAction * 5)
-	window.destroy()
 }
 
 const scrape = async () => {
@@ -190,17 +191,16 @@ const scrape = async () => {
 	await page.click(sp.login)
 	await delay(arg_pauseBeforeAction * 2)
 
-	// TODO try for 
+	// TODO try for
 	// Check if user and password is correct
 	try {
 		await page.click(sp.login)
-	} catch (e) {
 		mainWindow.webContents.send("messages", "wrong user password")
-		console.log('wrong password')
+		console.log("wrong password")
 		window.destroy()
 		mainWindow.webContents.send("crawler-closed")
 		return
-	}
+	} catch (e) {}
 
 	mainWindow.webContents.send("messages", "scraping mail...")
 
@@ -283,8 +283,7 @@ function createWindow() {
 
 pie.initialize(app).then(() => {
 	app.whenReady().then(() => {
-		loadRandomComments(),
-			createWindow(),
+		createWindow(),
 			app.on("activate", () => {
 				if (BrowserWindow.getAllWindows().length === 0) {
 					createWindow()

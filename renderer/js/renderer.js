@@ -92,6 +92,8 @@ window.data.loadDatas((datas) => {
 // receive and load log messages to launch button console
 ipcRenderer.on("messages", (event, messages) => {
 	ready_log(messages)
+	if(messages == 'done :)')
+		progress()
 })
 
 // receive total pages from backend
@@ -103,9 +105,11 @@ ipcRenderer.on("progress-totalPages", (event, total_pages) => {
 ipcRenderer.on("progress-currentPage", (event, current_page) => {
 	currentPage = current_page + 1
 	ready_log(`filling page ${currentPage}/${totalPages}`)
-	// totalPlanets +1 for the rocket leave animation
-	while (currentPage / totalPages >= currentPlanet / (totalPlanets + 1)) {
+	
+	while (currentPage / totalPages >= currentPlanet / (totalPlanets)) {
 		currentPlanet++
 		progress()
+		if(currentPlanet == totalPlanets)
+			break;
 	}
 })

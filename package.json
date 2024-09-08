@@ -1,5 +1,5 @@
 {
-  "name": "redcap",
+  "name": "greencap",
   "version": "1.0.0",
   "description": "this is an app for auto fill redcap survey",
   "main": "index.js",
