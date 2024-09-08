@@ -1,4 +1,4 @@
-# Form filler
+# Green Cap
 
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Yu-hc/form_filler/total)
 ![GitHub Release](https://img.shields.io/github/v/release/Yu-hc/form_filler)
@@ -16,7 +16,7 @@
 
 ## 使用步驟
 
-1. 下載並且開啟redcap程式
+1. 下載並且開啟green-cap程式
 2. 輸入ntu webmail的帳號密碼或者手動貼上表單連結
 3. 輸入小組討論組別
 4. 按下 launch 並等待程式執行完畢
