@@ -13,6 +13,9 @@ body {
 		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 	overflow: hidden;
 }
+::-webkit-scrollbar {
+       display: none;
+}
 
 
 
