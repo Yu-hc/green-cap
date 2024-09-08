@@ -1,16 +1,15 @@
-const pages =
-	"div.RH5hzf.RLS9Fe > div > div.Dq4amc > div > div.N0gd6 > div.cBGGJ.OIC90c"
+const pages = "xpath//html/body/div[10]/div[1]/div/p/span"
 const evaluation = "#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div"
 const evaluationButton1 =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(2) > div > div > div.PY6Xd > div.lLfZXe.fnxRtf.BpKDyb > span > div > label:nth-child(2) > div.eRqjfd > div > div > div.vd3tt"
 const evaluationButton2 =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(3) > div > div > div.PY6Xd > div.lLfZXe.fnxRtf.BpKDyb > span > div > label:nth-child(2) > div.eRqjfd > div > div > div.vd3tt"
 const suggestion =
-	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(5) > div > div > div.AgroKb > div > div.aCsJod.oJeWuf > div > div.Xb9hP > input"
+	"xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[7]/td[3]/span/input"
 const nextPage1 =
-	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div > span"
+	"xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[2]/td/table/tbody/tr[1]/td/button"
 const nextPage2 =
-	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div:nth-child(2) > span"
+	"xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[8]/td/table/tbody/tr[1]/td/div[2]/button"
 const selectGroup =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(1) > div > div > div.vQES8d > div > div:nth-child(1) > div.ry3kXd"
 const group =

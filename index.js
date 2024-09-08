@@ -10,14 +10,14 @@ const defaults = require("./data/constants/default")
 const isDev = process.env.NODE_ENV == "production"
 
 // args for web crawler
-let string_webmailUser = "b11401090"
-let string_webmailPsswd = "Ethan0416"
+let string_webmailUser = ""
+let string_webmailPsswd = ""
 let showCrawler = true
 let formUrl =
-	"https://docs.google.com/forms/d/e/1FAIpQLSeVkvrtuFoeKN3Wl1NWovOiA0uNGKZyCe538bpDbq9mP_mKUw/viewform?usp=sf_link"
+	""
 let discussGroup = 0
 let discussTopic = ""
-let int_evaluationScore = 2
+let int_evaluationScore = 1
 let string_suggestion = ""
 let randomSuggestion = false
 let randomCheck = false
@@ -25,7 +25,7 @@ let stringArray_RandomSuggestion
 let useMail = true
 
 let arg_pauseBeforeAction = 500
-let pathUserData = app.getPath("userData") 
+let pathUserData = app.getPath("userData")
 
 const NOTIFICATION_TITLE = "Basic Notification"
 const NOTIFICATION_BODY = "Notification from the Main process"
@@ -46,7 +46,7 @@ function createNotification() {
 
 function getEvaluationScore() {
 	if (!randomCheck) return int_evaluationScore
-	return Math.floor(Math.random() * 5) + 1
+	return Math.floor(Math.random() * 3) + 1
 }
 function getSuggestion() {
 	if (!randomSuggestion) return string_suggestion
@@ -60,9 +60,9 @@ const loadRandomComments = async () => {
 	stringArray_RandomSuggestion = $.split("\n")
 }
 const load_args = async () => {
-	let exist = fs.existsSync(path.join(pathUserData,"./data.json"))
+	let exist = fs.existsSync(path.join(pathUserData, "./data.json"))
 	if (exist) {
-		let sData = fs.readFileSync(path.join(pathUserData,"./data.json"))
+		let sData = fs.readFileSync(path.join(pathUserData, "./data.json"))
 		let datas = JSON.parse(sData)
 		// load values to index.js
 		string_webmailUser = datas.string_webmailUser
@@ -112,7 +112,7 @@ function save_args() {
 		useMail,
 	}
 	let sData = JSON.stringify(datas)
-	fs.writeFileSync(path.join(pathUserData,"./data.json"), sData)
+	fs.writeFileSync(path.join(pathUserData, "./data.json"), sData)
 	// fs.writeFileSync(path.join(app.getPath('userData'), './data/data.json'), sData)
 }
 
@@ -128,87 +128,91 @@ const main = async () => {
 	await window.loadURL(formUrl)
 	// TODO: set timout for loadurl , handle error
 	const innerHtml_pages = await page.$eval(sp.pages, (el) => el.innerHTML)
-	const int_totalPages = Number(innerHtml_pages[innerHtml_pages.length - 2])
-
+	let int_totalPages
+	// if > 10 pages, length will > 11
+	if (innerHtml_pages.length > 11) {
+		int_totalPages =
+			Number(innerHtml_pages[innerHtml_pages.length - 3]) +
+			Number(innerHtml_pages[innerHtml_pages.length - 4]) * 10
+	} else {
+		int_totalPages = Number(innerHtml_pages[innerHtml_pages.length - 3])
+	}
 	mainWindow.webContents.send("progress-totalPages", int_totalPages)
 
 	for (let int_page = 0; int_page < int_totalPages; int_page++) {
 		/*
-		fill in the score and suqqestions
+		fill in the score and suqqestion
 		*/
 		await delay(1000)
 		// send the current page to frontend(log and progress bar)
 		mainWindow.webContents.send("progress-currentPage", int_page)
 
 		if (int_page == 0) {
-			await page.type(sp.discussTopic, discussTopic)
+			// await page.type(sp.discussTopic, discussTopic)
 			// go to next page
 			await page.click(sp.nextPage1)
 		} else {
 			// go to next page
-			for (let div = 0; div < 3; div++) {
+			for (let div = 0; div < 4; div++) {
 				await page.click(
-					sp.evaluation +
-						":nth-child(" +
-						String(div + 2) +
-						")" +
-						" > div > div > div.PY6Xd > div.lLfZXe.fnxRtf.BpKDyb > span > div > label:nth-child(" +
-						String(getEvaluationScore() + 1) +
-						")"
+					`xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[${String(
+						div + 3
+					)}]/td[2]/table/tbody/tr/td[${String(
+						getEvaluationScore() + 2
+					)}]/input`
 				)
 				await delay(arg_pauseBeforeAction)
 			}
 			await page.type(sp.suggestion, getSuggestion())
 			await delay(arg_pauseBeforeAction)
-			await page.click(sp.nextPage2)
+			if (int_page != int_totalPages - 1) await page.click(sp.nextPage2)
 		}
 	}
 	mainWindow.webContents.send("messages", "done :)")
+	await delay(arg_pauseBeforeAction * 5)
 	window.destroy()
 }
 
 const scrape = async () => {
 	save_args()
-
+	// initialize page
 	const browser = await pie.connect(app, puppeteer)
 	const window = new BrowserWindow({
 		show: showCrawler,
 		parent: mainWindow,
 	})
 	const page = await pie.getPage(browser, window)
-
 	await window.loadURL(str.webMailUrl)
 
 	// login to webmail
 	await page.type(sp.username, string_webmailUser)
 	await page.type(sp.password, string_webmailPsswd)
 	await page.click(sp.login)
-
 	await delay(arg_pauseBeforeAction * 2)
 
+	// TODO try for 
 	// Check if user and password is correct
 	try {
 		await page.click(sp.login)
 	} catch (e) {
 		mainWindow.webContents.send("messages", "wrong user password")
+		console.log('wrong password')
+		window.destroy()
+		mainWindow.webContents.send("crawler-closed")
+		return
 	}
 
 	mainWindow.webContents.send("messages", "scraping mail...")
 
-	// disable scraping function
-	window.destroy()
-	mainWindow.webContents.send("crawler-closed")
-	return
-	let gotMail = 0
-	// TODO: move page.click(sp.nextPageWebmail) to last and set max page
-	for (let int_currentPage = 1; int_currentPage < 6; int_currentPage++) {
+	let gotMail = false
+	// TODO: error for can't find form
+	// scrape and set formUrl
+	for (let currentPage = 1; currentPage < 30; currentPage++) {
 		if (gotMail) break
-		await page.click(sp.nextPageWebmail)
 
 		await delay(arg_pauseBeforeAction * 2)
 		let element_senders = await page.$$(sp.sender)
 		let element_titles = await page.$$(sp.title)
-		let element_mails = await page.$$(sp.mail)
 		let array_sender = []
 		let index = 0
 		for (let element_sender of element_senders) {
@@ -216,6 +220,7 @@ const scrape = async () => {
 				(el) => el.innerHTML,
 				element_sender
 			)
+			// check sender
 			if (sender == str.redcapSender) {
 				let out = await page.evaluate(
 					(el) => el.innerHTML,
@@ -223,6 +228,7 @@ const scrape = async () => {
 				)
 				let sel =
 					"table > tbody > tr:nth-child(" + String(index + 1) + ")"
+				// check title of the mail and set formUrl
 				if (
 					out.includes(str.redcapTitle1) &&
 					out.includes(str.redcapTitle2)
@@ -233,15 +239,14 @@ const scrape = async () => {
 					let iframeElementHandle = await page.$("iframe")
 					let iframe = await iframeElementHandle.contentFrame()
 					let href = await iframe.$eval(sp.formUrl, (el) => el.href)
-					console.log(href)
-					gotMail = 1
-					// TODO: uncomment the line below to get the formUrl
-					// formurl = href
+					gotMail = true
+					formUrl = href
 				}
 			}
 			index++
 			array_sender.push(String(sender))
 		}
+		await page.click(sp.nextPageWebmail)
 	}
 	window.destroy()
 	mainWindow.webContents.send("crawler-closed")
