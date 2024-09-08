@@ -38,4 +38,13 @@ some youtube url
 
 - 此程式目前只適用於醫學院每週的醫學系教學效果調查表，有額外的 redcap 問卷此程式無法填寫
 - 小組討論主題目前填寫為空
-- 因為我之前沒有寫過類似project，且目前尚處於非常早期的版本，如果有發現程式運行時的錯誤或著有改善程式的建議，都可以[聯絡我](mailto:damingwang0007@gmail.com)
+- 因為我之前沒有寫過類似project，且目前尚處於非常早期的版本，如果有發現程式運行時的錯誤或著有改善程式的建議，都可以聯絡我\
+Email: [damingwang0007@gmail.com](mailto:damingwang0007@gmail.com)
+
+## Attribution
+
+[Hat icons created by Smashicons - Flaticon](https://www.flaticon.com/free-icons/hat)
+
+[Planets icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/planets)
+
+[Spaceship icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/spaceship)
