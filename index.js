@@ -161,8 +161,9 @@ const main = async () => {
 				}
 				await page.type(sp.suggestion, getSuggestion())
 				await delay(arg_pauseBeforeAction)
-				if (int_page != int_totalPages - 1)
-					await page.click(sp.nextPage2)
+				// if (int_page != int_totalPages - 1)
+				// 	await page.click(sp.nextPage2)
+				await page.click(sp.nextPage2)
 			}
 		}
 		mainWindow.webContents.send("messages", "done :)")
