@@ -10,11 +10,13 @@
 
 ## 使用步驟
 
-1. 前往 [releases](https://github.com/Yu-hc/form_filler/releases) 頁面下載符合電腦作業系統的最新版本（mac: darwin, win: win32/win64）
-2. mac 打開終端機輸入以下指令，並將 greencap 程式檔案拉到終端機中，開啟權限
+1. 前往 [releases](https://github.com/Yu-hc/form_filler/releases) 頁面下載符合電腦作業系統的最新版本（mac: darwin, win: win32 x86）
+2. 解壓縮並開啟程式權限，可參考[使用照片](#使用照片)
+    - mac 打開終端機輸入以下指令，並將 greencap 程式檔案拉到終端機中，開啟權限
 
-       xattr -cr "path/to/app"
+          xattr -cr "path/to/app"
 
+    - windows 右鍵點擊 greencap 程式，選擇「內容」->「安全性」-> 勾選「解鎖」  
 3. 開啟 greencap 程式
 4. 輸入 ntu webmail 的帳號密碼或者手動貼上表單連結
 5. 輸入小組討論組別
@@ -29,8 +31,14 @@
 - 開啟 show crawler ，在程式運行時會開啟爬蟲視窗，然而如果在運行過程中關閉爬蟲視窗，程式運行會發生錯誤，不建議開啟
 - 按下 reset default 所有設定回復至剛下載程式時的預設值
 
-## 使用影片
+## 使用照片
 
+- mac 權限開啟
+![alt text](<Screenshot 2024-09-13 at 3.58.14 PM.png>)
+- windows 權限開啟
+![alt text](<Screenshot 2024-09-13 at 2.28.01 PM.png>)
+![alt text](<Screenshot 2024-09-13 at 2.28.12 PM.png>)
+![alt text](<Screenshot 2024-09-13 at 2.28.22 PM.png>)
 some youtube url
 
 ## 注意事項
