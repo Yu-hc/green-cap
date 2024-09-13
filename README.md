@@ -10,7 +10,7 @@
 
 ## 使用步驟
 
-1. 前往 [releases](https://github.com/Yu-hc/form_filler/releases) 頁面下載符合電腦作業系統的最新版本（mac: darwin, win: win32 x86）
+1. 前往 [releases](https://github.com/Yu-hc/form_filler/releases) 頁面下載符合電腦作業系統的最新版本（mac: darwin, win: win32 x64）
 2. 解壓縮並開啟程式權限，可參考[使用照片](#使用照片)
     - mac 打開終端機輸入以下指令，並將 greencap 程式檔案拉到終端機中，開啟權限
 
