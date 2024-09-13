@@ -11,9 +11,9 @@
 ## 使用步驟
 
 1. 前往 [releases](https://github.com/Yu-hc/form_filler/releases) 頁面下載符合電腦作業系統的最新版本（mac: darwin, win: win32/win64）
-2. 打開終端機（macOS: terminal, windows: cmd），輸入以下指令，並將 greencap 程式檔案拉到終端機中，開啟權限
+2. mac 打開終端機輸入以下指令，並將 greencap 程式檔案拉到終端機中，開啟權限
 
-       xattr -cr 
+       xattr -cr "path/to/app"
 
 3. 開啟 greencap 程式
 4. 輸入 ntu webmail 的帳號密碼或者手動貼上表單連結
@@ -24,7 +24,7 @@
 
 ## 設定
 
-- 開啟 random suggestion ，會在問卷的評論中填入隨機的評語（評語由chatGPT預先生成，共100則）
+- 開啟 random suggestion ，會在問卷的評論中填入隨機的[評語](https://github.com/Yu-hc/green-cap/blob/main/randomSuggestion.txt)（評語由chatGPT預先生成，共100則）
 - 開啟 random check ，會將原本全部勾選非常滿意改為隨機勾選非常滿意至普通
 - 開啟 show crawler ，在程式運行時會開啟爬蟲視窗，然而如果在運行過程中關閉爬蟲視窗，程式運行會發生錯誤，不建議開啟
 - 按下 reset default 所有設定回復至剛下載程式時的預設值
