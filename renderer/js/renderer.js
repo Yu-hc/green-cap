@@ -75,6 +75,12 @@ buttonReset.addEventListener("click", () => {
 	ipcRenderer.send("button-reset")
 })
 
+// send close window signal to index
+function closeWindow(){
+	ipcRenderer.send("close-window")
+}
+
+
 // receive and set configs to frontend
 window.data.loadDatas((datas) => {
 	inputWebmailUser.value = datas.string_webmailUser
@@ -86,7 +92,10 @@ window.data.loadDatas((datas) => {
 	toggleRandomCheck.checked = datas.randomCheck
 	toggleShowCrawler.checked = datas.showCrawler
 	toggleUseMail.checked = !datas.useMail
-	toggleCards()
+	setTimeout(() => {
+		toggleCards()
+	}, 100);
+	
 })
 
 // receive and load log messages to launch button console
@@ -112,4 +121,9 @@ ipcRenderer.on("progress-currentPage", (event, current_page) => {
 		if(currentPlanet == totalPlanets)
 			break;
 	}
+})
+
+ipcRenderer.on('close-window', ()=>{
+	console.log('des')
+	buttonEnd()
 })

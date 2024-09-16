@@ -161,15 +161,17 @@ const main = async () => {
 				}
 				await page.type(sp.suggestion, getSuggestion())
 				await delay(arg_pauseBeforeAction)
-				// if (int_page != int_totalPages - 1)
-				// 	await page.click(sp.nextPage2)
-				await page.click(sp.nextPage2)
+				if (int_page != int_totalPages - 1)
+					await page.click(sp.nextPage2)
+				// await page.click(sp.nextPage2)
 			}
 		}
 		mainWindow.webContents.send("messages", "done :)")
+		mainWindow.webContents.send("close-window")
 		await delay(arg_pauseBeforeAction * 5)
 	} catch (e) {
 		mainWindow.webContents.send("messages", "failed :(")
+		mainWindow.webContents.send("close-window")
 	} finally {
 		window.destroy()
 	}
@@ -197,6 +199,7 @@ const scrape = async () => {
 	try {
 		await page.click(sp.login)
 		mainWindow.webContents.send("messages", "wrong user password")
+		mainWindow.webContents.send("close-window")
 		console.log("wrong password")
 		window.destroy()
 		mainWindow.webContents.send("crawler-closed")
@@ -344,4 +347,7 @@ ipcMain.on("button-launch", (event, arg) => {
 })
 ipcMain.on("button-reset", () => {
 	reset_args()
+})
+ipcMain.on('close-window', ()=>{
+	app.quit()
 })

@@ -9,6 +9,34 @@ let logAnimationDone = 0
 // remove the 'launch' text from button
 function buttonAnimate() {
 	buttonText.style.animation = "text-shrink 0.4s steps(6,end) forwards"
+	
+}
+// reverse the log window back to button
+function buttonEnd(){
+	// remove all logs in log window
+	let logDivs = document.getElementsByClassName('log')
+	for(let i = 0 ; i < logDivs.length; i++){
+		logDivs[i].style.display = 'none'
+	}
+	// remove header
+	header.style.animation = "header-appear-rev 1s forwards"
+       header.addEventListener('animationend', ()=>{
+              header.classList.remove("show-header")
+              header_.classList.remove("show-header")
+		// shrink button
+              buttonLaunch.style.animation = "button-expand-rev 1s forwards"
+              buttonLaunch.classList.remove('animating')
+		// show 'Close' in launch button
+              buttonLaunch.addEventListener('animationend', ()=>{
+			buttonText.innerText = 'Close'
+                     buttonText.style.display = 'block'
+                     buttonText.style.width = '0'
+                     buttonText.style.animation  = 'text-shrink-rev 0.4s steps(6,end) forwards 1s'
+              }, {once: true})
+              buttonLaunch.addEventListener('click', ()=>{
+                     closeWindow()
+              }, {once: true})
+       }, {once: true})
 }
 buttonText.addEventListener(
 	"animationend",
@@ -35,7 +63,7 @@ header.addEventListener("animationend", () => {
 	while (logCache.length != 0) {
 		add_log(logCache.shift())
 	}
-})
+}, {once: true})
 
 // put log into logCache, animate if header is ready
 function ready_log(log) {
