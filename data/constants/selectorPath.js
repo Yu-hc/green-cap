@@ -11,11 +11,11 @@ const nextPage1 =
 const nextPage2 =
 	"xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[8]/td/table/tbody/tr[1]/td/div[2]/button"
 const selectGroup =
-	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(1) > div > div > div.vQES8d > div > div:nth-child(1) > div.ry3kXd"
+	"#group-tr > td.data.col-5.greenhighlight > span > span > select"
 const group =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(1) > div > div > div.vQES8d > div > div.OA0qNb.ncFHed.QXL7Te > div.MocG8c.HZ3kWc.mhLiyf.OIC90c.LMgvRb.KKjvXb"
 const discussTopic =
-	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(2) > div > div > div.AgroKb > div > div.aCsJod.oJeWuf > div > div.Xb9hP > input"
+	"#title-tr > td.data.col-5 > span > input"
 const username = "#rcmloginuser"
 const password = "#rcmloginpwd"
 const login = "#rcmloginsubmit"

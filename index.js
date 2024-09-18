@@ -14,8 +14,8 @@ let string_webmailUser = ""
 let string_webmailPsswd = ""
 let showCrawler = false
 let formUrl = ""
-let discussGroup = 0
-let discussTopic = ""
+let discussGroup = 1
+let discussTopic = "教案"
 let int_evaluationScore = 1
 let string_suggestion = ""
 let randomSuggestion = false
@@ -144,9 +144,19 @@ const main = async () => {
 			mainWindow.webContents.send("progress-currentPage", int_page)
 
 			if (int_page == 0) {
-				// await page.type(sp.discussTopic, discussTopic)
-				// go to next page
-				await page.click(sp.nextPage1)
+				
+				try {
+					await page.select(sp.selectGroup, discussGroup)
+					await page.type(sp.discussTopic, discussTopic)
+				}
+				catch(e){
+
+				}
+				finally{
+					// go to next page
+					await page.click(sp.nextPage1)
+				}
+				
 			} else {
 				// go to next page
 				for (let div = 0; div < 4; div++) {
@@ -167,11 +177,10 @@ const main = async () => {
 			}
 		}
 		mainWindow.webContents.send("messages", "done :)")
-		mainWindow.webContents.send("close-window")
-		await delay(arg_pauseBeforeAction * 5)
+		setTimeout(()=>{mainWindow.webContents.send("close-window")}, "1000")
 	} catch (e) {
 		mainWindow.webContents.send("messages", "failed :(")
-		mainWindow.webContents.send("close-window")
+		setTimeout(()=>{mainWindow.webContents.send("close-window")}, "1000")
 	} finally {
 		window.destroy()
 	}
