@@ -230,6 +230,7 @@ const scrape = async () => {
 		let index = 0
 		console.log(element_senders)
 		for (let element_sender of element_senders) {
+			if (gotMail) break
 			let sender = await page.evaluate(
 				(el) => el.innerHTML,
 				element_sender
