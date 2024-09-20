@@ -228,6 +228,7 @@ const scrape = async () => {
 		let element_titles = await page.$$(sp.title)
 		let array_sender = []
 		let index = 0
+		console.log(element_senders)
 		for (let element_sender of element_senders) {
 			let sender = await page.evaluate(
 				(el) => el.innerHTML,
@@ -239,6 +240,7 @@ const scrape = async () => {
 					(el) => el.innerHTML,
 					element_titles[index]
 				)
+				console.log(sender, out)
 				let sel =
 					"table > tbody > tr:nth-child(" + String(index + 1) + ")"
 				// check title of the mail and set formUrl
@@ -246,6 +248,7 @@ const scrape = async () => {
 					out.includes(str.redcapTitle1) &&
 					out.includes(str.redcapTitle2)
 				) {
+					console.log('found')
 					await page.waitForSelector(sel)
 					await page.click(sel)
 					await delay(arg_pauseBeforeAction * 5)
