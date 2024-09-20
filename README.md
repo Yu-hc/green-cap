@@ -44,6 +44,7 @@ some youtube url
 
 ## 注意事項
 
+- 如果第一次開啟時畫面看起來有一點奇怪，可以點一下上方的 ntu webmail/form url 的開關，畫面就會變正常
 - 醫學二的表單未經過測試，如果有錯誤麻煩聯絡我
 - 此程式輸入的 ntu webmail 帳號密碼僅會用於登入學校信箱爬取表單連結
 - 由於我並未申請 apple developer account ， 因此程式需要移除 com.apple.quarantine 才能正常在 macOS 上運行
