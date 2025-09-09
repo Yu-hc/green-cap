@@ -144,30 +144,38 @@ const main = async () => {
 			mainWindow.webContents.send("progress-currentPage", int_page)
 
 			if (int_page == 0) {
-				
 				try {
 					await page.select(sp.selectGroup, discussGroup)
 					await page.type(sp.discussTopic, discussTopic)
 				}
 				catch(e){
-
+					console.log(e)
 				}
 				finally{
 					// go to next page
+					console.log('first page')
 					await page.click(sp.nextPage1)
+					console.log('click next page')
 				}
 				
 			} else {
 				// go to next page
 				for (let div = 0; div < 4; div++) {
 					await page.click(
-						`xpath//html/body/div[10]/div[1]/div/form/div/table/tbody/tr[${String(
+						`#questiontable > tbody > tr:nth-child(${String(
 							div + 3
-						)}]/td[2]/table/tbody/tr/td[${String(
+						)}) > td:nth-child(2) > table > tbody > tr > td:nth-child(${String(
 							getEvaluationScore() + 2
-						)}]/input`
+						)}) > input`
 					)
 					await delay(arg_pauseBeforeAction)
+					// #questiontable > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(3) > input
+					// #attitude_101-tr > td > table > tbody > tr > td:nth-child(3)
+					// #mtxopt-attitude_101_3
+					// #method_101-tr > td.labelmatrix.col-11 > table > tbody > tr > td:nth-child(3)
+					// #content_101-tr > td.labelmatrix.col-11 > table > tbody > tr > td:nth-child(4)
+					// /html/body/div[10]/div[1]/div/form/div/table/tbody/tr[6]/td[2]/table/tbody/tr/td[3]
+					// /html/body/div[10]/div[1]/div/form/div/table/tbody/tr[5]/td[2]/table/tbody/tr/td[5]
 				}
 				await page.type(sp.suggestion, getSuggestion())
 				await delay(arg_pauseBeforeAction)
@@ -179,6 +187,7 @@ const main = async () => {
 		mainWindow.webContents.send("messages", "done :)")
 		setTimeout(()=>{mainWindow.webContents.send("close-window")}, "1000")
 	} catch (e) {
+		console.log(e)
 		mainWindow.webContents.send("messages", "failed :(")
 		setTimeout(()=>{mainWindow.webContents.send("close-window")}, "1000")
 	} finally {
