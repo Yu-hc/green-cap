@@ -53,6 +53,15 @@ function getSuggestion() {
 		Math.floor(Math.random() * stringArray_RandomSuggestion.length)
 	]
 }
+// Utility: Returns true if click succeeded, false otherwise
+const tryClick = async (page, selector) => {
+	try {
+		await page.click(selector)
+		return true
+	} catch (e) {
+		return false
+	}
+}
 
 const load_args = async () => {
 	let exist = fs.existsSync(path.join(pathUserData, "./data.json"))
@@ -147,49 +156,94 @@ const main = async () => {
 				try {
 					await page.select(sp.selectGroup, discussGroup)
 					await page.type(sp.discussTopic, discussTopic)
-				}
-				catch(e){
+				} catch (e) {
 					console.log(e)
-				}
-				finally{
+				} finally {
 					// go to next page
-					console.log('first page')
-					await page.click(sp.nextPage1)
-					console.log('click next page')
+					console.log("first page")
+					try {
+						await page.click(sp.nextPage1)
+					} catch (e) {
+						await page.click(sp.nextPage2)
+					}
+					console.log("click next page")
 				}
-				
 			} else {
 				// go to next page
 				for (let div = 0; div < 4; div++) {
 					await page.click(
 						`#questiontable > tbody > tr:nth-child(${String(
-							div + 3
+							div + 3,
 						)}) > td:nth-child(2) > table > tbody > tr > td:nth-child(${String(
-							getEvaluationScore() + 2
-						)}) > input`
+							getEvaluationScore() + 2,
+						)}) > input`,
 					)
 					await delay(arg_pauseBeforeAction)
-					// #questiontable > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(3) > input
-					// #attitude_101-tr > td > table > tbody > tr > td:nth-child(3)
-					// #mtxopt-attitude_101_3
-					// #method_101-tr > td.labelmatrix.col-11 > table > tbody > tr > td:nth-child(3)
-					// #content_101-tr > td.labelmatrix.col-11 > table > tbody > tr > td:nth-child(4)
-					// /html/body/div[10]/div[1]/div/form/div/table/tbody/tr[6]/td[2]/table/tbody/tr/td[3]
-					// /html/body/div[10]/div[1]/div/form/div/table/tbody/tr[5]/td[2]/table/tbody/tr/td[5]
 				}
-				await page.type(sp.suggestion, getSuggestion())
-				await delay(arg_pauseBeforeAction)
+				// Define your selectors clearly
+				const selectors = {
+					row7: `#questiontable > tbody > tr:nth-child(7) > td.data.col-5 > span > div.choicevert:nth-child(3) > input`,
+					row7Dynamic: `#questiontable > tbody > tr:nth-child(7) > td.data.col-5 > span > div.choicevert:nth-child(${2}) > input`,
+					row7Fallback: `#questiontable > tbody > tr:nth-child(7) > td.data.col-5 > span > span:nth-child(2) > input`,
+					row8Dynamic: `#questiontable > tbody > tr:nth-child(8) > td.data.col-5 > span > div.choicevert:nth-child(${2}) > input`,
+					row8Fallback: `#questiontable > tbody > tr:nth-child(8) > td.data.col-5 > span > span:nth-child(2) > input`,
+				}
+
+				try {
+					// 1. Attempt the first mandatory click
+					const row7Success = await tryClick(page, selectors.row7)
+
+					// 2. Attempt Row 8 (Try dynamic first, then fallback)
+					const row7DynamicSuccess = await tryClick(
+						page,
+						selectors.row7Dynamic,
+					)
+					const row7FallbackSuccess = await tryClick(
+						page,
+						selectors.row7Fallback,
+					)
+					const row8DynamicSuccess = await tryClick(
+						page,
+						selectors.row8Dynamic,
+					)
+					const row8FallbackSuccess = await tryClick(
+						page,
+						selectors.row8Fallback,
+					)
+					// 3. Handle the suggestion logic
+					const suggestionSuccess = await tryClick(
+						page,
+						sp.suggestionAlt,
+					)
+					if (suggestionSuccess) {
+						await page.type(sp.suggestionAlt, getSuggestion())
+					} else {
+						// If alt failed, try the main suggestion field
+						await page.type(sp.suggestion, getSuggestion())
+					}
+				} catch (globalError) {
+					console.error(
+						"Critical automation error:",
+						globalError.message,
+					)
+				} finally {
+					await delay(arg_pauseBeforeAction)
+				}
 				// if (int_page != int_totalPages - 1)
 				// 	await page.click(sp.nextPage2)
 				await page.click(sp.nextPage2)
 			}
 		}
 		mainWindow.webContents.send("messages", "done :)")
-		setTimeout(()=>{mainWindow.webContents.send("close-window")}, "1000")
+		setTimeout(() => {
+			mainWindow.webContents.send("close-window")
+		}, "1000")
 	} catch (e) {
 		console.log(e)
 		mainWindow.webContents.send("messages", "failed :(")
-		setTimeout(()=>{mainWindow.webContents.send("close-window")}, "1000")
+		setTimeout(() => {
+			mainWindow.webContents.send("close-window")
+		}, "1000")
 	} finally {
 		window.destroy()
 	}
@@ -242,13 +296,13 @@ const scrape = async () => {
 			if (gotMail) break
 			let sender = await page.evaluate(
 				(el) => el.innerHTML,
-				element_sender
+				element_sender,
 			)
 			// check sender
 			if (sender == str.redcapSender) {
 				let out = await page.evaluate(
 					(el) => el.innerHTML,
-					element_titles[index]
+					element_titles[index],
 				)
 				console.log(sender, out)
 				let sel =
@@ -258,7 +312,7 @@ const scrape = async () => {
 					out.includes(str.redcapTitle1) &&
 					out.includes(str.redcapTitle2)
 				) {
-					console.log('found')
+					console.log("found")
 					await page.waitForSelector(sel)
 					await page.click(sel)
 					await delay(arg_pauseBeforeAction * 5)
@@ -309,17 +363,17 @@ function createWindow() {
 }
 
 pie.initialize(app).then(() => {
-	app.whenReady().then(() => {
-		createWindow(),
+	;(app.whenReady().then(() => {
+		;(createWindow(),
 			app.on("activate", () => {
 				if (BrowserWindow.getAllWindows().length === 0) {
 					createWindow()
 				}
-			})
+			}))
 	}),
 		app.on("window-all-closed", () => {
 			app.quit()
-		})
+		}))
 })
 
 ipcMain.on("input-webmailUser", (event, user) => {
@@ -370,6 +424,6 @@ ipcMain.on("button-launch", (event, arg) => {
 ipcMain.on("button-reset", () => {
 	reset_args()
 })
-ipcMain.on('close-window', ()=>{
+ipcMain.on("close-window", () => {
 	app.quit()
 })

@@ -4,12 +4,15 @@ const evaluationButton1 =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(2) > div > div > div.PY6Xd > div.lLfZXe.fnxRtf.BpKDyb > span > div > label:nth-child(2) > div.eRqjfd > div > div > div.vd3tt"
 const evaluationButton2 =
 	"#mG61Hd > div.RH5hzf.RLS9Fe > div > div.o3Dpx > div:nth-child(3) > div > div > div.PY6Xd > div.lLfZXe.fnxRtf.BpKDyb > span > div > label:nth-child(2) > div.eRqjfd > div > div > div.vd3tt"
+const evaluationButton3 =
+	'#opt-name_1011_2'
 const suggestion = "tbody > tr:nth-child(7) > td > span > input"
+const suggestionAlt = "tbody > tr:nth-child(8) > td > span > input"
+// if form contains more than 4 evaluation questions
 const nextPage1 =
 	"#questiontable > tbody > tr > td > table > tbody > tr:nth-child(1) > td > button"
 const nextPage2 =
-	"#questiontable > tbody > tr> td > table > tbody > tr:nth-child(1) > td > div.col-12:nth-child(2) > button:nth-child(1)"
-
+	"#questiontable > tbody > tr> td > table > tbody > tr:nth-child(1) > td > div:nth-child(2) > button:nth-child(1)"
 const selectGroup =
 	"#group-tr > td.data.col-5.greenhighlight > span > span > select"
 const group =
@@ -29,7 +32,9 @@ module.exports = Object.freeze({
 	evaluation: evaluation,
 	evaluationButton1: evaluationButton1,
 	evaluationButton2: evaluationButton2,
+	evaluationButton3: evaluationButton3,
 	suggestion: suggestion,
+	suggestionAlt: suggestionAlt,
 	nextPage1: nextPage1,
 	nextPage2: nextPage2,
 	selectGroup: selectGroup,
