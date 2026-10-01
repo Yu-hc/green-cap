@@ -5,3 +5,4 @@ out
 git-filter-repo.txt
 renderer/test
 .vscode
+.DS_Store
