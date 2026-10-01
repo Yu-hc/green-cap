@@ -1,11 +1,6 @@
 name: Build and Release (Mac & Windows)
 
 on:
-  push:
-    branches:
-      - main       # 或 master
-    tags:
-      - 'v*'       # 推送版本標籤時觸發 (如 v1.0.0)
   workflow_dispatch: # 支援在 GitHub 網頁上手動點擊執行
 
 permissions:
@@ -100,4 +95,4 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
