@@ -1,0 +1,103 @@
+name: Build and Release (Mac & Windows)
+
+on:
+  push:
+    branches:
+      - main       # 或 master
+    tags:
+      - 'v*'       # 推送版本標籤時觸發 (如 v1.0.0)
+  workflow_dispatch: # 支援在 GitHub 網頁上手動點擊執行
+
+permissions:
+  contents: write  # 賦予寫入 Releases 的權限
+
+jobs:
+  # ==========================================
+  # 1. 同時並行打包 Windows 與 macOS
+  # ==========================================
+  build:
+    name: Package on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # 其中一個平台失敗，另一個繼續跑完
+      matrix:
+        include:
+          # Windows Runner
+          - os: windows-latest
+            artifact-name: windows-packages
+            # 支援 Electron Forge (out/make) 或 electron-builder (dist)
+            build-path: |
+              out/make/**/*.exe
+              out/make/**/*.msi
+              out/make/**/*.zip
+              dist/*.exe
+              dist/*.msi
+
+          # macOS Runner (Apple Silicon / ARM64)
+          - os: macos-latest
+            artifact-name: mac-packages
+            build-path: |
+              out/make/**/*.dmg
+              out/make/**/*.zip
+              dist/*.dmg
+              dist/*.zip
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # 執行你的打包指令
+      - name: Package application
+        run: npm run make
+
+      # 上傳產出檔案（暫存供 release 工作使用）
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.build-path }}
+          if-no-files-found: warn
+
+  # ==========================================
+  # 2. 統整上傳到同一個 GitHub Release
+  # ==========================================
+  release:
+    name: Publish to GitHub Release
+    needs: build # 確保 Mac 與 Windows 都打包完成
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 一次把所有 build 產生的 packages 下載到 release-assets 目錄
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true # 將所有檔案攤平合併至同一資料夾
+
+      # 建立 Release 並把 Mac / Win 封包一次全掛上去
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # 若推 tag 則以 tag 為名；若是 push main 或手動觸發，則統一標為 latest
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
+          name: ${{ github.ref_type == 'tag' && github.ref_name || 'Latest Build' }}
+          files: |
+            release-assets/**/*.exe
+            release-assets/**/*.msi
+            release-assets/**/*.dmg
+            release-assets/**/*.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
